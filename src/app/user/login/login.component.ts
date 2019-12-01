@@ -9,7 +9,6 @@ import { FormGroup, FormControl,Validators, FormBuilder } from '@angular/forms';
 export class LoginComponent implements OnInit {
 
   private signUpForm:FormGroup;
-  submitted = false;
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -26,14 +25,15 @@ export class LoginComponent implements OnInit {
 
   
   onSubmit() {
-    this.submitted = true;
+  
+    if(this.signUpForm.get("userType").value==="admin"){
 
-    // stop here if form is invalid
-    // if (this.signUpForm.invalid) {
-    //     return;
-    // }
-    console.log(this.signUpForm.get("email"))
+    }
+    else{
 
+    }
+
+    
     alert('SUCCESS!! :-)')
 }
 

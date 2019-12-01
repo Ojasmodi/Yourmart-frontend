@@ -3,20 +3,24 @@ import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { UserService } from '../../user.service';
+import { UserService } from 'src/app/user.service';
 import { CookieService } from 'ngx-cookie-service';
 import { ProductService } from '../../product.service';
+import { Location } from '@angular/common';
+declare var $: any
 
 @Component({
-  selector: 'app-seller-dashboard',
-  templateUrl: './seller-dashboard.component.html',
-  styleUrls: ['./seller-dashboard.component.css']
+  selector: 'app-all-product',
+  templateUrl: './all-product.component.html',
+  styleUrls: ['./all-product.component.css'],
+  providers:[Location]
 })
-export class SellerDashboardComponent implements OnInit {
 
-  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name', 'Status','Category','MRP','SSP','YMP', 'view', 'Edit', 'Delete'];
+export class AllProductComponent implements OnInit {
+
+  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name' ,'Category','MRP','SSP','YMP','Created On','Updated On', 'view','Status'];
   allProducts: MatTableDataSource<any>;
-  //ProductTypes = ['BackLog', 'In-test', 'In-progress', 'Done']
+  productStatusTypes = ["NEW", "APPROVED", "REJECTED", "REVIEW"]
   userName;
   authToken;
   userId;
@@ -25,10 +29,13 @@ export class SellerDashboardComponent implements OnInit {
 
   @ViewChild(MatSort,{static: true}) sort: MatSort;
   @ViewChild(MatPaginator,{static: true}) paginator: MatPaginator;
+  selectedStatus: any;
+  prodId: any;
+  comment: any;
  
 
   constructor(public productService: ProductService, public toastrService: ToastrService,
-    public router: Router, private spinner: NgxSpinnerService,
+    public router: Router, private spinner: NgxSpinnerService, private location:Location,
     public userManagementService: UserService, public cookieService: CookieService) { }
 
   ngOnInit() {
@@ -37,7 +44,7 @@ export class SellerDashboardComponent implements OnInit {
     this.sellerId = this.cookieService.get('sellerId')
     this.userId = this.cookieService.get('userId');
     //this.checkStatus();
-    this.getProductsBySellerId(this.sellerId);
+    this.getAllProducts()
   }
 
   // function to check whether user is logged in or not
@@ -53,21 +60,19 @@ export class SellerDashboardComponent implements OnInit {
   }
 
   // function to get all Products
-  getProductsBySellerId = (sellerId) => {
+  getAllProducts(){
     //this.spinner.show()
-    this.productService.getProductsBySellerId(1).subscribe((data) => {
+    this.productService.getAllProducts().subscribe((data:any) => {
       //this.spinner.hide()
       if (data!=null) {
         //this.allProducts=data['products']
-        for(let prod of data['products']){
+        for(let prod of data){
           for(let image of prod['images']){
             if(image['isPrimaryImage'])
             prod.imageSrc="http://localhost:8080/images/"+image['imagePath'].substring(image['imagePath'].lastIndexOf("\\")+1)
          }
-        }
-        console.log(data['products'])
-        
-        this.allProducts = new MatTableDataSource(data['products']);
+        }        
+        this.allProducts = new MatTableDataSource(data);
         
         this.allProducts.sort = this.sort;
         this.allProducts.paginator = this.paginator;
@@ -96,29 +101,62 @@ export class SellerDashboardComponent implements OnInit {
     this.router.navigate(['view-product', productId])
   }
 
-  // function for navigating to edit Product component
-  public editProduct = (productId) => {
-    this.router.navigate(['edit-product', productId])
+  addComment(){
+    if(!this.comment || this.comment.trim().length==0)
+    this.toastrService.warning("Enter a comment")
+    else{
+      let data={
+        commentValue:this.comment,
+        commentByUserId:1,
+        commentByUserName:"ojas"
+      }
+      this.productService.addCommentToProduct(data,this.prodId).subscribe((response)=>{
+        $('#exampleModal').modal('toggle');
+        if(response!=null){
+          this.updateStatus();
+        }
+        else
+        this.toastrService.error("Failed to update status.")
+      },
+    err=>{
+      this.toastrService.error("Some error occured.")
+    })
+    }
+    
   }
 
-  // function to delete Product
-  public deleteProduct = (productId) => {
-    //this.spinner.show()
-    this.productService.deleteProduct(productId).subscribe((apiResponse) => {
-      //this.spinner.hide()
-      if (apiResponse!=null) {
-        this.toastrService.info(`Product Deleted successfully.`)
-        this.getProductsBySellerId(this.sellerId);
-      }
-      else {
-        this.toastrService.error("Unable to delete product.")
-      }
+  updateStatusOfProduct(selectedStatus,prodId){
+    this.selectedStatus=selectedStatus;
+    this.prodId=prodId;
+    if(selectedStatus=="REJECTED"){ 
+      $('#exampleModal').modal('toggle');
+    }
+    else{
+      this.updateStatus()
+    }  
+  }
+
+  updateStatus(){
+    let data={
+      prodStatus:this.selectedStatus,
+      prodId:this.prodId
+    }
+    this.productService.updateStatusOfProduct(data).subscribe(response=>{
+      console.log(response)
+        if(response==true){
+          this.toastrService.success("Status updated successfully.")
+        }
+        else{
+          this.toastrService.error("Unable to update status.")
+        }
     },
-      err => {
-       // this.spinner.hide()
-        this.toastrService.error(err)
-      }
-    );
+    err=>{
+      this.toastrService.error("Some error occured.")
+    });
+  }
+
+  public goBackToPreviousPage(){
+    this.location.back();
   }
 
   // function to logout user
@@ -143,4 +181,5 @@ export class SellerDashboardComponent implements OnInit {
       })
 
     }
+
 }

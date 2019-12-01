@@ -1,1 +1,168 @@
-<p>edit-product works!</p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white text-capitalize sticky-top mat-elevation-z8">
+  <a class="navbar-brand">
+    <img src="./../../../assets/YSign.jfif" style="border-radius: 25px;" width="30" height="30"
+      class="d-inline-block align-top" alt="">
+    YourMart
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item">
+      </li>
+    </ul>
+    <span class="form-inline my-2 my-lg-0">
+      <button class="btn btn-outline-info my-2 my-sm-0" (click)="logout()">Logout({{userName}})</button>
+    </span>
+  </div>
+</nav>
+<div class="container" *ngIf="currentProduct">
+  <div class="card mat-elevation-z8 m-4" style='margin: "2%";'>
+    <div class="card-header text-center font-weight-bold bg-secondary text-white">
+      <span class="text-danger">Product Name:</span> {{currentProduct.prodName}}
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <div *ngFor="let image of productImages">
+            <img *ngIf="image['isPrimaryImage']" class="img-responsive" [src]="image['imagePath']" alt="Smiley face"
+              height="100%" width="100%">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="text-info font-weight-bold">Change primary Image:</label>
+            <br>
+            <input type="file" (change)="onPrimaryImagePicked($event)">
+            <small class="form-text text-muted">*less than 5MB and format-png, jpg, jpeg only.</small>
+          </div>
+        </div>
+      </div>
+     <hr>
+      <div class="row">
+        <div class="col-sm" *ngFor="let image of productImages">
+          <img *ngIf="!image['isPrimaryImage']" class="img-responsive" [src]="image['imagePath']" alt="Smiley face"
+            height="80%" width="80%">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+              <label class="text-info font-weight-bold">Add product images:</label>
+              <br>
+              <input type="file" (change)="onPrimaryImagePicked($event)">
+              <small class="form-text text-muted">*less than 5MB and format-png, jpg, jpeg only.</small>
+              <button class="mt-2 mat-elevation-z8 btn btn-sm btn-success"  (click)="addOtherProductImages()">Add photos</button> 
+            </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm">
+          <label class="text-info font-weight-bold">Uploaded user guide:</label>
+          <a class="btn btn-sm  mat-elevation-z8 btn-info ml-2" [href]="currentProduct.pdfPath" target="blank">View</a> 
+        </div>
+      </div>
+      <div class="row">
+            <div class="col-sm">
+                <input type="file" (change)="onuserGuidePicked($event)">
+                  <small class="form-text text-muted">*less than 5MB and format-pdf,txt,doc.</small> 
+              <button class="mt-2 mat-elevation-z8 btn btn-sm btn-success"  (click)="updateProductUserGuide()">Update user guide</button> 
+            </div>
+      </div>
+      <hr>
+      <div class="row">
+          <div class="col-sm">
+            <label class="text-info font-weight-bold">Other product details:</label>
+          </div>
+      </div>
+
+          <div class="row m-1">
+              <div class="col-sm">
+                
+                  <span>Seller Product Code: </span>
+                  <input type="text" class="form-control" [(ngModel)]="currentProduct.prodCode" placeholder="FirstName">
+          
+                  <br>
+                  <span>Product Name: </span>
+                  <input type="text" class="form-control" [(ngModel)]="currentProduct.prodName" placeholder="LastName">
+                  <br>
+                  <span>Short description: </span>
+                  <input type="text" id="inputLastName" class="form-control" [(ngModel)]="currentProduct.shortDes" placeholder="LastName">
+          
+                  <br>
+                  <span>Long Description: </span>
+                  <input type="text" id="inputLastName" class="form-control" [(ngModel)]="currentProduct.longDesc" placeholder="LastName">
+          
+                  <br>
+          
+                  <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                          <label class="input-group-text" for="inputGroupSelect01">Category</label>
+                      </div>
+                      <select class="custom-select" [(ngModel)]="currentProduct.category">
+                          <option *ngFor="let cat of categories" [value]="cat"> {{cat}}</option>
+                      </select>
+                  </div>
+          
+                  Dimensions:-
+                  <div class="row">
+                      <div class="col">
+                          <span>Product length: </span>
+                          <input type="number" class="form-control" [(ngModel)]="currentProduct.prodLength" placeholder="Mobile">
+          
+                      </div>
+                      <div class="col">
+                          <span>Product breadth: </span>
+                          <input type="number" class="form-control" [(ngModel)]="currentProduct.prodBreadth" placeholder="Mobile">
+          
+                      </div>
+                      <div class="col">
+                          <span>Product height: </span>
+                          <input type="number" class="form-control" [(ngModel)]="currentProduct.prodHeight" placeholder="Mobile">
+                      </div>
+                  </div>
+                  <br>          
+                  Product prices:-
+                  <div class="row">
+                      <div class="col">
+                          <span>MRP: </span>
+                          <input type="number" class="form-control" [(ngModel)]="currentProduct.mrp " placeholder="Mobile">
+          
+                      </div>
+                      <div class="col">
+                          <span>SSP: </span>
+                          <input type="number" class="form-control" [(ngModel)]="currentProduct.ssp" placeholder="Mobile">
+          
+                      </div>
+                      <div class="col">
+                          <span>YMP: </span>
+                          <input type="number" class="form-control" [(ngModel)]="currentProduct.ymp" placeholder="Mobile">
+                      </div>
+                  </div>
+                  <br>
+          
+                  Product attributes:-
+                  <div class="row">
+                      <div class="col">
+                          <span>Color: </span>
+                          <input type="text" class="form-control" [(ngModel)]="currentProduct.prodColor" placeholder="Mobile">
+          
+                      </div>
+                      <div class="col">
+                          <span>Brand: </span>
+                          <input type="text" class="form-control" [(ngModel)]="currentProduct.prodBrand" placeholder="Mobile">
+          
+                      </div>
+                      <div class="col">
+                          <span>Weight: </span>
+                          <input type="number" class="form-control" [(ngModel)]="currentProduct.prodWeight" placeholder="Mobile">
+                      </div>
+                  </div>
+                  <br>
+                 <button class="btn btn-lg mat-elevation-z8 btn-info btn-block" (click)="updateOtherdetailsOfProduct()">Update product</button>
+              </div>
+      </div>
+    </div>
+  </div>
+</div>

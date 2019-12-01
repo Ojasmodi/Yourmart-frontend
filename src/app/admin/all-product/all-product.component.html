@@ -21,13 +21,11 @@
 <br>
 
 <div class="container">
+    <button mat-icon-button matTooltip="Go back" (click)="goBackToPreviousPage()">
+        <mat-icon class="img-responsive">keyboard_backspace</mat-icon>
+    </button>
     <br>
-    <div class="row justify-content-center">
-        <button class="btn mat-elevation-z8 btn-info btn-sm text-center" routerLink='/add-product'>Click here to add a new product.
-            </button>
-    </div>
-    <br>
-    <h2 class="text-center">My Products</h2>
+    <h2 class="text-center">All Products</h2>
     <div class="search-div">
         <mat-form-field class="search-form-field" floatLabel="never">
             <input matInput [(ngModel)]="searchKey" placeholder="Search for an product" autocomplete="off"
@@ -37,12 +35,12 @@
             </button>
         </mat-form-field>
     </div>
-    <div class="mat-elevation-z8 tableText">
+    <div class="mat-elevation-z8 tableText" >
         <mat-table [dataSource]="allProducts" matSort *ngIf="allProducts">
             <ng-container matColumnDef="Primary Image">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Primary Image </mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                        <img [src]="element.imageSrc"  width="60px" height="60px"/>
+                    <img [src]="element.imageSrc" width="60px" height="60px" />
                 </mat-cell>
             </ng-container>
             <ng-container matColumnDef="Product Code">
@@ -54,50 +52,46 @@
                 <mat-cell *matCellDef="let element">{{element.prodName}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="Status">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Status</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.prodStatus}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                        <mat-select panelClass="example-panel-dark-blue" [(ngModel)]="element.prodStatus" (selectionChange)="updateStatusOfProduct($event.value,element.prodId)">
+                            <mat-option *ngFor="let status of productStatusTypes" [value]="status">
+                                {{status}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-cell>
             </ng-container>
             <ng-container matColumnDef="Category">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Category</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.category}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Category</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.category}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="MRP">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> MRP</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.mrp}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> MRP</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.mrp}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="SSP">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> SSP</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.ssp}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> SSP</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.ssp}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="YMP">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> YMP</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.ymp}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> YMP</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.ymp}}</mat-cell>
             </ng-container>
-            <!-- <ng-container matColumnDef="CreatedOn">
+            <ng-container matColumnDef="Created On">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Created On</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.createdOn | date}} </mat-cell>
-            </ng-container> -->
+                <mat-cell *matCellDef="let element">{{element.createdOn|date}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Updated On">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Updated On</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.updatedOn|date}} </mat-cell>
+            </ng-container>
             <ng-container matColumnDef="view">
                 <mat-header-cell *matHeaderCellDef>View</mat-header-cell>
                 <mat-cell *matCellDef="let element">
                     <button mat-icon-button matTooltip="View Product" (click)="viewProduct(element.prodId)">
                         <mat-icon class="img-responsive">launch</mat-icon>
-                    </button>
-                </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="Edit">
-                <mat-header-cell *matHeaderCellDef>Edit</mat-header-cell>
-                <mat-cell *matCellDef="let element"><button mat-icon-button matTooltip="Edit Product"
-                         (click)="editProduct(element.prodId)">
-                        <mat-icon class="img-responsive">edit</mat-icon>
-                    </button> </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="Delete">
-                <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <button  mat-icon-button color="warn"
-                        matTooltip="Delete Product" (click)="deleteProduct(element.prodId)">
-                        <mat-icon class="img-responsive">delete_outline</mat-icon>
                     </button>
                 </mat-cell>
             </ng-container>
@@ -107,9 +101,32 @@
                 </mat-footer-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" class="pr-3"></mat-row>
             <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':allProducts!=null}"></mat-footer-row>
         </mat-table>
         <mat-paginator [pageSizeOptions]="[2, 5, 10]" [pageSize]="5" showFirstLastButtons></mat-paginator>
     </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Please provide comments to update the status.</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" [(ngModel)]="comment" required class="form-control"
+          placeholder="Enter registered email only" name="forget_email">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-info" (click)="addComment()">Submit</button>
+      </div>
+    </div>
+  </div>
 </div>

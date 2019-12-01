@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [HomeComponent, LoginComponent, SignupComponent],
@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CommonModule,
     HttpClientModule,
     FormsModule,ReactiveFormsModule,
+    ToastrModule.forRoot(),
     RouterModule.forRoot([
       { path: 'login', component: LoginComponent, pathMatch: 'full' },
       { path: 'signup', component: SignupComponent , pathMatch: 'full'},

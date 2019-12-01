@@ -1,1 +1,54 @@
-<p>admin-dashboard works!</p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white text-capitalize sticky-top mat-elevation-z8">
+    <a class="navbar-brand">
+        <img src="./../../../assets/YSign.jfif" style="border-radius: 25px;" width="30" height="30"
+            class="d-inline-block align-top" alt="">
+        YourMart
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+            </li>
+        </ul>
+        <span class="form-inline my-2 my-lg-0">
+            <button class="btn btn-outline-info my-2 my-sm-0" (click)="logout()">Logout({{userName}})</button>
+        </span>
+    </div>
+</nav>
+<div class="jumbotron">
+        <h1>Welcome {{userName}}</h1>
+        <p class="lead">Manage all sellers and their products here.</p>
+</div>
+
+<div class="container">
+        <div class="row justify-content-center">
+            <div class="col-1"></div>
+            <div class="col">
+                <div class="card mat-elevation-z8 top-margin border"
+                    style="width: 18rem; margin-top: 1vh;margin-bottom: 3vh; background:#c9d7e2;">
+                    <img src="./../../../assets/allsellers.jfif"  width="285px" height="181px" class=" img-responsive" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">View all sellers.</h5>
+                        <p class="card-text text-muted">Get all sellers details and change their status to approve or reject them.</p>
+                        <a routerLink="/all-sellers" style="color:white;" class="btn btn-block mat-elevation-z8 btn-dark">Click to view</a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col">
+                <div class="card mat-elevation-z8 top-margin border "
+                    style="width: 18rem; margin-top: 1vh;margin-bottom: 4vh; background:#c9d7e2;">
+                    <img src="./../../../assets/allproducts.jfif" width="285px" height="181px" class=" img-responsive" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">View all products.</h5>
+                        <p class="card-text text-muted">Get all products details, update status and provide comments/feedback on products.</p>
+                        <a routerLink="/all-products" style="color:white;" class="btn btn-block mat-elevation-z8 btn-dark">Click to view</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>

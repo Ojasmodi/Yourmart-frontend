@@ -3,20 +3,24 @@ import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { UserService } from '../../user.service';
+import { UserService } from 'src/app/user.service';
 import { CookieService } from 'ngx-cookie-service';
+import { Location } from '@angular/common';
 import { ProductService } from '../../product.service';
 
-@Component({
-  selector: 'app-seller-dashboard',
-  templateUrl: './seller-dashboard.component.html',
-  styleUrls: ['./seller-dashboard.component.css']
-})
-export class SellerDashboardComponent implements OnInit {
 
-  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name', 'Status','Category','MRP','SSP','YMP', 'view', 'Edit', 'Delete'];
-  allProducts: MatTableDataSource<any>;
-  //ProductTypes = ['BackLog', 'In-test', 'In-progress', 'Done']
+@Component({
+  selector: 'app-all-seller',
+  templateUrl: './all-seller.component.html',
+  styleUrls: ['./all-seller.component.css'],
+  providers:[Location]
+})
+
+export class AllSellerComponent implements OnInit {
+
+  displayedColumns: string[] = ['Seller Id', 'Owner name', 'Company Name' ,'Email','GST Number', 'view','Status'];
+  allSellers: MatTableDataSource<any>;
+  sellerStatusTypes = ["NEED_APPROVAL", "APPROVED", "REJECTED"]
   userName;
   authToken;
   userId;
@@ -27,8 +31,8 @@ export class SellerDashboardComponent implements OnInit {
   @ViewChild(MatPaginator,{static: true}) paginator: MatPaginator;
  
 
-  constructor(public productService: ProductService, public toastrService: ToastrService,
-    public router: Router, private spinner: NgxSpinnerService,
+  constructor( public toastrService: ToastrService,
+    public router: Router, private spinner: NgxSpinnerService, private location:Location,
     public userManagementService: UserService, public cookieService: CookieService) { }
 
   ngOnInit() {
@@ -37,7 +41,7 @@ export class SellerDashboardComponent implements OnInit {
     this.sellerId = this.cookieService.get('sellerId')
     this.userId = this.cookieService.get('userId');
     //this.checkStatus();
-    this.getProductsBySellerId(this.sellerId);
+    this.getallSellers()
   }
 
   // function to check whether user is logged in or not
@@ -52,26 +56,18 @@ export class SellerDashboardComponent implements OnInit {
     }
   }
 
-  // function to get all Products
-  getProductsBySellerId = (sellerId) => {
+  // function to get all sellers
+  getallSellers(){
     //this.spinner.show()
-    this.productService.getProductsBySellerId(1).subscribe((data) => {
+    this.userManagementService.getAllSellers().subscribe((data:any) => {
       //this.spinner.hide()
-      if (data!=null) {
-        //this.allProducts=data['products']
-        for(let prod of data['products']){
-          for(let image of prod['images']){
-            if(image['isPrimaryImage'])
-            prod.imageSrc="http://localhost:8080/images/"+image['imagePath'].substring(image['imagePath'].lastIndexOf("\\")+1)
-         }
-        }
-        console.log(data['products'])
+      if (data!=null) {    
+        console.log(data) 
+        this.allSellers = new MatTableDataSource(data);
         
-        this.allProducts = new MatTableDataSource(data['products']);
-        
-        this.allProducts.sort = this.sort;
-        this.allProducts.paginator = this.paginator;
-        //console.log(this.allProducts)
+        this.allSellers.sort = this.sort;
+        this.allSellers.paginator = this.paginator;
+        //console.log(this.allSellers)
       }
     },
       err => {
@@ -88,37 +84,37 @@ export class SellerDashboardComponent implements OnInit {
 
   // function to filter rows
   applyFilter = () => {
-    this.allProducts.filter = this.searchKey.trim().toLowerCase();
+    this.allSellers.filter = this.searchKey.trim().toLowerCase();
   }
 
-  // function for navigating to view Product component
-  public viewProduct = (productId) => {
-    this.router.navigate(['view-product', productId])
+  // function for navigating to view seller component
+  public viewSeller = (sellerId) => {
+    this.router.navigate(['view-seller', sellerId])
   }
 
-  // function for navigating to edit Product component
-  public editProduct = (productId) => {
-    this.router.navigate(['edit-product', productId])
-  }
+  updateStatusOfSeller(selectedStatus,sellerId){
 
-  // function to delete Product
-  public deleteProduct = (productId) => {
-    //this.spinner.show()
-    this.productService.deleteProduct(productId).subscribe((apiResponse) => {
-      //this.spinner.hide()
-      if (apiResponse!=null) {
-        this.toastrService.info(`Product Deleted successfully.`)
-        this.getProductsBySellerId(this.sellerId);
-      }
-      else {
-        this.toastrService.error("Unable to delete product.")
-      }
+    let data={
+      status:selectedStatus,
+      sellerId:sellerId
+    }
+    this.userManagementService.updateStatusOfseller(data).subscribe(response=>{
+      console.log(response)
+        if(response==true){
+          this.toastrService.success("Status updated successfully.")
+        }
+        else{
+          this.toastrService.error("Unable to update status.")
+        }
     },
-      err => {
-       // this.spinner.hide()
-        this.toastrService.error(err)
-      }
-    );
+    err=>{
+      this.toastrService.error("Some error occured.")
+    });
+    
+  }
+
+  public goBackToPreviousPage(){
+    this.location.back();
   }
 
   // function to logout user
@@ -143,4 +139,5 @@ export class SellerDashboardComponent implements OnInit {
       })
 
     }
+
 }

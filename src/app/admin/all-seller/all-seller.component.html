@@ -1,0 +1,93 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white text-capitalize sticky-top mat-elevation-z8">
+        <a class="navbar-brand">
+            <img src="./../../../assets/YSign.jfif" style="border-radius: 25px;" width="30" height="30"
+                class="d-inline-block align-top" alt="">
+            YourMart
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                </li>
+            </ul>
+            <span class="form-inline my-2 my-lg-0">
+                <button class="btn btn-outline-info my-2 my-sm-0" (click)="logout()">Logout({{userName}})</button>
+            </span>
+        </div>
+    </nav>
+    <br>
+    
+    <div class="container">
+        <button mat-icon-button matTooltip="Go back" (click)="goBackToPreviousPage()">
+            <mat-icon class="img-responsive">keyboard_backspace</mat-icon>
+        </button>
+        <br>
+        <h2 class="text-center">All Sellers</h2>
+        <div class="search-div">
+            <mat-form-field class="search-form-field" floatLabel="never">
+                <input matInput [(ngModel)]="searchKey" placeholder="Search for an product" autocomplete="off"
+                    (keyup)="applyFilter()">
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="mat-elevation-z8 tableText" >
+            <mat-table [dataSource]="allSellers" matSort *ngIf="allSellers">
+                <ng-container matColumnDef="Seller Id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Seller Id </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        {{element.sellerId}}
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Owner name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Owner name</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.ownerName}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Company Name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Company Name</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.companyName}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Email">
+                    <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="GST Number">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> GST Number</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.gstnumber}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Status">
+                        <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <mat-form-field>
+                                <mat-select panelClass="example-panel-dark-blue" [(ngModel)]="element.status" (selectionChange)="updateStatusOfSeller($event.value,element.sellerId)">
+                                    <mat-option *ngFor="let status of sellerStatusTypes" [value]="status">
+                                        {{status}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </mat-cell>
+                    </ng-container>
+                <ng-container matColumnDef="view">
+                    <mat-header-cell *matHeaderCellDef>View</mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <button mat-icon-button matTooltip="View Seller" (click)="viewSeller(element.sellerId)">
+                            <mat-icon class="img-responsive">launch</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="noData">
+                    <mat-footer-cell *matFooterCellDef colspan="6">
+                        noData
+                    </mat-footer-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" class="pr-2"></mat-row>
+                <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':allSellers!=null}"></mat-footer-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[2, 5, 10]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
