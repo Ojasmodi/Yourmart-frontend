@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ViewSellerComponent } from './view-seller/view-seller.component';
 import { AllProductComponent } from './all-product/all-product.component';
 import { AllSellerComponent } from './all-seller/all-seller.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 
@@ -20,6 +21,7 @@ import { AllSellerComponent } from './all-seller/all-seller.component';
   ],
   imports: [
     CommonModule,HttpClientModule,ToastrModule.forRoot(),FormsModule,MaterialModule,
+    NgxSpinnerModule,
     RouterModule.forChild([
       { path: 'admin-dashboard', component: AdminDashboardComponent },
       { path: 'all-products', component: AllProductComponent },

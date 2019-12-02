@@ -24,11 +24,11 @@ export class ProductService {
     return this.http.get(`${this.baseUrl}/product/get/productId/${productId}`);
   }
 
-  addNewImagesOfProduct(productData: FormData,id) {
-    return this.http.post(`${this.baseUrl}/product/add/otherimages/${id}`, productData);
+  addNewImagesOfProduct(productData: FormData,sellerId,prodId) {
+    return this.http.post(`${this.baseUrl}/product/add/otherimages/${sellerId}/${prodId}`, productData);
   }
-  updateFilesOfProduct(productData: FormData,id) {
-    return this.http.put(`${this.baseUrl}/product/update/primaryImageOrUserGuide/${id}`, productData);
+  updateFilesOfProduct(productData: FormData,prodId) {
+    return this.http.put(`${this.baseUrl}/product/update/primaryImageOrUserGuide/${prodId}`, productData);
   }
 
   updateOtherdetailsOfProduct(id,data: { "prodCode": any; "prodName": any; "shortDes": any; "longDesc": any; "prodLength": any; "prodBreadth": any; "prodHeight": any; "prodColor": any; "prodWeight": any; "prodBrand": any; "category": any; "prodId": any; "mrp": any; "ssp": any; "ymp": any; }) {
@@ -46,8 +46,12 @@ export class ProductService {
     return this.http.get(`${this.baseUrl}/seller/get/${sellerId}`);
   }
 
+  getSellerBySellerId(sellerId:any){
+    return this.getProductsBySellerId(sellerId)
+  }
+
   updateStatusOfProduct(data: any) {
-    return this.http.post(`${this.baseUrl}/product/update/status`, data);
+    return this.http.put(`${this.baseUrl}/product/update/status`, data);
   }
   getAllProducts() {
     return this.http.get(`${this.baseUrl}/product/all`);

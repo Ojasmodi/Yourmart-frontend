@@ -14,18 +14,17 @@ import { ProductService } from '../../product.service';
 })
 export class SellerDashboardComponent implements OnInit {
 
-  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name', 'Status','Category','MRP','SSP','YMP', 'view', 'Edit', 'Delete'];
+  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name', 'Status', 'Category', 'MRP', 'SSP', 'YMP', 'view', 'Edit', 'Delete'];
   allProducts: MatTableDataSource<any>;
-  //ProductTypes = ['BackLog', 'In-test', 'In-progress', 'Done']
   userName;
   authToken;
   userId;
   searchKey: string;
   sellerId: string;
 
-  @ViewChild(MatSort,{static: true}) sort: MatSort;
-  @ViewChild(MatPaginator,{static: true}) paginator: MatPaginator;
- 
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
 
   constructor(public productService: ProductService, public toastrService: ToastrService,
     public router: Router, private spinner: NgxSpinnerService,
@@ -34,10 +33,9 @@ export class SellerDashboardComponent implements OnInit {
   ngOnInit() {
     this.authToken = this.cookieService.get('authToken')
     this.userName = this.cookieService.get('userName')
-    this.sellerId = this.cookieService.get('sellerId')
     this.userId = this.cookieService.get('userId');
-    //this.checkStatus();
-    this.getProductsBySellerId(this.sellerId);
+    this.checkStatus();
+    this.getProductsBySellerId();
   }
 
   // function to check whether user is logged in or not
@@ -53,29 +51,25 @@ export class SellerDashboardComponent implements OnInit {
   }
 
   // function to get all Products
-  getProductsBySellerId = (sellerId) => {
-    //this.spinner.show()
-    this.productService.getProductsBySellerId(1).subscribe((data) => {
-      //this.spinner.hide()
-      if (data!=null) {
-        //this.allProducts=data['products']
-        for(let prod of data['products']){
-          for(let image of prod['images']){
-            if(image['isPrimaryImage'])
-            prod.imageSrc="http://localhost:8080/images/"+image['imagePath'].substring(image['imagePath'].lastIndexOf("\\")+1)
-         }
+  getProductsBySellerId = () => {
+    this.spinner.show()
+    this.productService.getProductsBySellerId(this.userId).subscribe((data) => {
+      this.spinner.hide()
+      if (data != null) {
+        for (let prod of data['products']) {
+          for (let image of prod['images']) {
+            if (image['isPrimaryImage'])
+              prod.imageSrc = "http://localhost:8080/images/" + image['imagePath'].substring(image['imagePath'].lastIndexOf("\\") + 1)
+          }
         }
-        console.log(data['products'])
-        
         this.allProducts = new MatTableDataSource(data['products']);
-        
+
         this.allProducts.sort = this.sort;
         this.allProducts.paginator = this.paginator;
-        //console.log(this.allProducts)
       }
     },
       err => {
-        //this.spinner.hide()
+        this.spinner.hide()
         this.toastrService.error("Some error occured.")
       });
   }
@@ -103,19 +97,19 @@ export class SellerDashboardComponent implements OnInit {
 
   // function to delete Product
   public deleteProduct = (productId) => {
-    //this.spinner.show()
+    this.spinner.show()
     this.productService.deleteProduct(productId).subscribe((apiResponse) => {
-      //this.spinner.hide()
-      if (apiResponse!=null) {
+      this.spinner.hide()
+      if (apiResponse != null) {
         this.toastrService.info(`Product Deleted successfully.`)
-        this.getProductsBySellerId(this.sellerId);
+        this.getProductsBySellerId();
       }
       else {
         this.toastrService.error("Unable to delete product.")
       }
     },
       err => {
-       // this.spinner.hide()
+        this.spinner.hide()
         this.toastrService.error(err)
       }
     );
@@ -142,5 +136,5 @@ export class SellerDashboardComponent implements OnInit {
         this.toastrService.error("Some error occured.");
       })
 
-    }
+  }
 }

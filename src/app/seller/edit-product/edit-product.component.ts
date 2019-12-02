@@ -5,11 +5,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from '../../user.service';
 import { ProductService } from '../../product.service';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
-  styleUrls: ['./edit-product.component.css']
+  styleUrls: ['./edit-product.component.css'],
+  providers:[Location]
 })
 export class EditProductComponent implements OnInit {
   
@@ -37,7 +40,7 @@ export class EditProductComponent implements OnInit {
   productImages: any;
 
 
-  constructor( public toastrService: ToastrService, public _route: ActivatedRoute,
+  constructor( public toastrService: ToastrService, public _route: ActivatedRoute,public location:Location,
     public router: Router,public route: ActivatedRoute,public productService:ProductService,
     private spinner: NgxSpinnerService, public userService: UserService, public cookieService: CookieService) {
   }
@@ -46,10 +49,9 @@ export class EditProductComponent implements OnInit {
     //this.spinner.show()
     this.userName = this.cookieService.get('userName');
     this.authToken = this.cookieService.get('authToken');
-    console.log("fsdbk")
     //this.checkStatus();
     this.productId = this._route.snapshot.paramMap.get('id');
-    this.getCurrentProduct(this.productId)
+    this.getCurrentProduct()
     
   }
 
@@ -111,8 +113,8 @@ export class EditProductComponent implements OnInit {
             //this.spinner.hide();
             console.log(apiResponse)
             if (apiResponse != null) {
-              this.toastrService.show("Product updated successfully.");
-              this.getCurrentProduct(apiResponse['prodId']);
+              this.toastrService.success("Product updated successfully.");
+              this.getCurrentProduct();
               //this.viewAllProducts()
             }
             else {
@@ -125,7 +127,7 @@ export class EditProductComponent implements OnInit {
         }
 
   }
-  getCurrentProduct(id) {
+  getCurrentProduct() {
     this.productService.getSingleproduct(this.productId).subscribe((apiResponse) => {
       //this.spinner.hide()
       if (apiResponse!=null) {
@@ -175,29 +177,31 @@ export class EditProductComponent implements OnInit {
 
   
 
-  onPrimaryImagePicked = (event: Event) => {
+  onPrimaryImagePicked = (event: Event,prodId) => {
     let file = (event.target as HTMLInputElement).files[0];
 
     if (file.name.indexOf(".jpeg") < 0 && file.name.indexOf(".png") < 0 && file.name.indexOf(".jpg") < 0) {
       this.toastrService.warning("Please select only jpeg or jpg or png image.")
-      this.validPrimaryImage = false;
+      //this.validPrimaryImage = false;
     }
     else {
       this.primaryImage = file;
-      this.updateFilesOfProduct(this.primaryImage,"primaryImage");
+      this.updateFilesOfProduct(this.primaryImage,"primaryImage",prodId);
       //this.validPrimaryImage = true;
     }
   }
 
-  updateFilesOfProduct(file,fieldName) {
+  updateFilesOfProduct(file,fieldName,prodId) {
+    console.log(prodId);
     let productData=new FormData();
     productData.append(fieldName,file,file.name)
-    this.productService.updateFilesOfProduct(productData,13).subscribe((response)=>{
-      if(response!=null){
-        this.toastrService.success("Primary Image updated successfully.")
+    this.productService.updateFilesOfProduct(productData,prodId).subscribe((response)=>{
+      if(response==true){
+        this.toastrService.success("Changes updated successfully.")
+        this.getCurrentProduct();
       }
       else{
-        this.toastrService.success("Failed to update primary image.")
+        this.toastrService.error("Failed to update changes.")
       }
     },
     err=>{
@@ -205,7 +209,7 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-  onuserGuidePicked = (event: Event) => {
+  onuserGuidePicked = (event: Event,prodId) => {
 
     let file = (event.target as HTMLInputElement).files[0];
 
@@ -215,7 +219,7 @@ export class EditProductComponent implements OnInit {
     }
     else {
       this.userGuide = file;
-      this.updateFilesOfProduct(this.userGuide,"document");
+      this.updateFilesOfProduct(this.userGuide,"document",prodId);
     }
   }
 
@@ -233,19 +237,20 @@ export class EditProductComponent implements OnInit {
       else {
         this.otherImages.push(file)
         this.validOtherImages = true;
-        this.addNewImagesOfProduct(this.validOtherImages)
+        //this.addNewImagesOfProduct()
       }
     }
   }
 
-  addNewImagesOfProduct(files){
+  addNewImagesOfProduct(prodId){
 
     let productData=new FormData()
     for (let file of this.otherImages)
     productData.append(file['name'], file, file['name']);
-    this.productService.addNewImagesOfProduct(productData,13).subscribe((response)=>{
+    this.productService.addNewImagesOfProduct(productData,1,prodId).subscribe((response)=>{
       if(response!=null){
         this.toastrService.success("Images added successfully.")
+        this.getCurrentProduct();
       }
       else{
         this.toastrService.success("Failed to add image|es.")
@@ -254,6 +259,10 @@ export class EditProductComponent implements OnInit {
     err=>{
       this.toastrService.error("Some error occured.")
     });
+  }
+
+  public goBackToPreviousPage(){
+    this.location.back();
   }
 
 

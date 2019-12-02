@@ -8,13 +8,14 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [HomeComponent, LoginComponent, SignupComponent],
   imports: [
     CommonModule,
     HttpClientModule,
-    FormsModule,ReactiveFormsModule,
+    FormsModule,ReactiveFormsModule,NgxSpinnerModule,
     ToastrModule.forRoot(),
     RouterModule.forRoot([
       { path: 'login', component: LoginComponent, pathMatch: 'full' },

@@ -35,10 +35,10 @@
             </button>
         </mat-form-field>
     </div>
-    <div class="mat-elevation-z8 tableText" >
+    <div class="mat-elevation-z8 tableText">
         <mat-table [dataSource]="allProducts" matSort *ngIf="allProducts">
             <ng-container matColumnDef="Primary Image">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Primary Image </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>Primary Image </mat-header-cell>
                 <mat-cell *matCellDef="let element">
                     <img [src]="element.imageSrc" width="60px" height="60px" />
                 </mat-cell>
@@ -55,7 +55,8 @@
                 <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
                 <mat-cell *matCellDef="let element">
                     <mat-form-field>
-                        <mat-select panelClass="example-panel-dark-blue" [(ngModel)]="element.prodStatus" (selectionChange)="updateStatusOfProduct($event.value,element.prodId)">
+                        <mat-select panelClass="example-panel-dark-blue" [(ngModel)]="element.prodStatus"
+                            (selectionChange)="updateStatusOfProduct($event.value,element.prodId)">
                             <mat-option *ngFor="let status of productStatusTypes" [value]="status">
                                 {{status}}
                             </mat-option>
@@ -110,23 +111,24 @@
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Please provide comments to update the status.</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <input type="text" [(ngModel)]="comment" required class="form-control"
-          placeholder="Enter registered email only" name="forget_email">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-info" (click)="addComment()">Submit</button>
-      </div>
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Please provide comments to update the status.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" [(ngModel)]="comment" required class="form-control"
+                    placeholder="Enter registered email only" name="forget_email">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" (click)="addComment()">Submit</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+<ngx-spinner></ngx-spinner>

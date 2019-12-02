@@ -8,6 +8,15 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
+  adminLogin(data) {
+    return this.http.post(`${this.baseUrl}/users/admin/login`, data);
+  }
+
+  sellerLogin(data) {
+    return this.http.post(`${this.baseUrl}/users/seller/login`, data);
+  }
+  
+  
   
 
   private baseUrl = 'http://localhost:8080/api/v1';

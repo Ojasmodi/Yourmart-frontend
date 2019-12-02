@@ -49,8 +49,6 @@ export class SignupComponent implements OnInit {
    }
    this.userService.signupFunction(data).subscribe((apiResponse) => {
     if (apiResponse!= null) {
-      this.cookieService.set('authToken', apiResponse.ownerName);
-      this.cookieService.set('sellerId', apiResponse.sellerId);
       this.toastr.show('Please login to continue.','Registration Successful.');
       this.route.navigate(['/login']);
     } else {

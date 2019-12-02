@@ -19,6 +19,10 @@
   </div>
 </nav>
 <div class="container" *ngIf="currentProduct">
+  <br>
+    <button mat-icon-button matTooltip="Go back" (click)="goBackToPreviousPage()">
+        <mat-icon class="img-responsive">keyboard_backspace</mat-icon>
+    </button>
   <div class="card mat-elevation-z8 m-4" style='margin: "2%";'>
     <div class="card-header text-center font-weight-bold bg-secondary text-white">
       <span class="text-danger">Product Name:</span> {{currentProduct.prodName}}
@@ -28,14 +32,14 @@
         <div class="col-sm-6">
           <div *ngFor="let image of productImages">
             <img *ngIf="image['isPrimaryImage']" class="img-responsive" [src]="image['imagePath']" alt="Smiley face"
-              height="100%" width="100%">
+              height="300px" width="100%">
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label class="text-info font-weight-bold">Change primary Image:</label>
             <br>
-            <input type="file" (change)="onPrimaryImagePicked($event)">
+            <input type="file" (change)="onPrimaryImagePicked($event,currentProduct.prodId)" accept="image/*">
             <small class="form-text text-muted">*less than 5MB and format-png, jpg, jpeg only.</small>
           </div>
         </div>
@@ -43,17 +47,18 @@
      <hr>
       <div class="row">
         <div class="col-sm" *ngFor="let image of productImages">
-          <img *ngIf="!image['isPrimaryImage']" class="img-responsive" [src]="image['imagePath']" alt="Smiley face"
-            height="80%" width="80%">
+          <div  *ngIf="!image['isPrimaryImage']">
+            <img class="img-responsive" [src]="image['imagePath']" alt="Smiley face" height="100px">
+          </div>
         </div>
       </div>
       <div class="row">
         <div class="col-sm">
               <label class="text-info font-weight-bold">Add product images:</label>
               <br>
-              <input type="file" (change)="onPrimaryImagePicked($event)">
+              <input type="file" (change)="onOtherImagesPicked($event)" multiple accept="image/*">
               <small class="form-text text-muted">*less than 5MB and format-png, jpg, jpeg only.</small>
-              <button class="mt-2 mat-elevation-z8 btn btn-sm btn-success"  (click)="addOtherProductImages()">Add photos</button> 
+              <button class="mt-2 mat-elevation-z8 btn btn-sm btn-success"  (click)="addNewImagesOfProduct(currentProduct.prodId)">Add photos</button> 
             </div>
       </div>
       <hr>
@@ -65,9 +70,11 @@
       </div>
       <div class="row">
             <div class="col-sm">
-                <input type="file" (change)="onuserGuidePicked($event)">
-                  <small class="form-text text-muted">*less than 5MB and format-pdf,txt,doc.</small> 
-              <button class="mt-2 mat-elevation-z8 btn btn-sm btn-success"  (click)="updateProductUserGuide()">Update user guide</button> 
+                <label class="text-info font-weight-bold">Change user guide:</label>
+                <br>
+                <input type="file" (change)="onuserGuidePicked($event,currentProduct.prodId)">
+                  <small class="form-text text-muted">*format should be pdf,txt,doc.</small> 
+              <!-- <button class="mt-2 mat-elevation-z8 btn btn-sm btn-success"  (click)="updateProductUserGuide(currentProduct.prodId)">Update user guide</button>  -->
             </div>
       </div>
       <hr>

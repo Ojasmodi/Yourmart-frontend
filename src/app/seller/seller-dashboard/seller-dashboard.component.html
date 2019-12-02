@@ -23,8 +23,9 @@
 <div class="container">
     <br>
     <div class="row justify-content-center">
-        <button class="btn mat-elevation-z8 btn-info btn-sm text-center" routerLink='/add-product'>Click here to add a new product.
-            </button>
+        <button class="btn mat-elevation-z8 btn-info btn-sm text-center" routerLink='/add-product'>Click here to add a
+            new product.
+        </button>
     </div>
     <br>
     <h2 class="text-center">My Products</h2>
@@ -42,7 +43,7 @@
             <ng-container matColumnDef="Primary Image">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Primary Image </mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                        <img [src]="element.imageSrc"  width="60px" height="60px"/>
+                    <img [src]="element.imageSrc" width="60px" height="60px" />
                 </mat-cell>
             </ng-container>
             <ng-container matColumnDef="Product Code">
@@ -54,24 +55,24 @@
                 <mat-cell *matCellDef="let element">{{element.prodName}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="Status">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Status</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.prodStatus}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Status</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.prodStatus}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="Category">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Category</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.category}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Category</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.category}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="MRP">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> MRP</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.mrp}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> MRP</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.mrp}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="SSP">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> SSP</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.ssp}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> SSP</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.ssp}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="YMP">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> YMP</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.ymp}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> YMP</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.ymp}}</mat-cell>
             </ng-container>
             <!-- <ng-container matColumnDef="CreatedOn">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Created On</mat-header-cell>
@@ -88,15 +89,15 @@
             <ng-container matColumnDef="Edit">
                 <mat-header-cell *matHeaderCellDef>Edit</mat-header-cell>
                 <mat-cell *matCellDef="let element"><button mat-icon-button matTooltip="Edit Product"
-                         (click)="editProduct(element.prodId)">
+                        (click)="editProduct(element.prodId)">
                         <mat-icon class="img-responsive">edit</mat-icon>
                     </button> </mat-cell>
             </ng-container>
             <ng-container matColumnDef="Delete">
                 <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                    <button  mat-icon-button color="warn"
-                        matTooltip="Delete Product" (click)="deleteProduct(element.prodId)">
+                    <button mat-icon-button color="warn" matTooltip="Delete Product"
+                        (click)="deleteProduct(element.prodId)">
                         <mat-icon class="img-responsive">delete_outline</mat-icon>
                     </button>
                 </mat-cell>
@@ -113,3 +114,4 @@
         <mat-paginator [pageSizeOptions]="[2, 5, 10]" [pageSize]="5" showFirstLastButtons></mat-paginator>
     </div>
 </div>
+<ngx-spinner></ngx-spinner>

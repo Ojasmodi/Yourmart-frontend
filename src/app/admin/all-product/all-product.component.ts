@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
+import {MatSort} from '@angular/material/sort'
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -13,12 +14,12 @@ declare var $: any
   selector: 'app-all-product',
   templateUrl: './all-product.component.html',
   styleUrls: ['./all-product.component.css'],
-  providers:[Location]
+  providers: [Location]
 })
 
 export class AllProductComponent implements OnInit {
 
-  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name' ,'Category','MRP','SSP','YMP','Created On','Updated On', 'view','Status'];
+  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name', 'Category', 'MRP', 'SSP', 'YMP', 'Created On', 'Updated On', 'view', 'Status'];
   allProducts: MatTableDataSource<any>;
   productStatusTypes = ["NEW", "APPROVED", "REJECTED", "REVIEW"]
   userName;
@@ -27,23 +28,22 @@ export class AllProductComponent implements OnInit {
   searchKey: string;
   sellerId: string;
 
-  @ViewChild(MatSort,{static: true}) sort: MatSort;
-  @ViewChild(MatPaginator,{static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   selectedStatus: any;
   prodId: any;
   comment: any;
- 
+
 
   constructor(public productService: ProductService, public toastrService: ToastrService,
-    public router: Router, private spinner: NgxSpinnerService, private location:Location,
+    public router: Router, private spinner: NgxSpinnerService, private location: Location,
     public userManagementService: UserService, public cookieService: CookieService) { }
 
   ngOnInit() {
     this.authToken = this.cookieService.get('authToken')
     this.userName = this.cookieService.get('userName')
-    this.sellerId = this.cookieService.get('sellerId')
-    this.userId = this.cookieService.get('userId');
-    //this.checkStatus();
+    this.userId = this.cookieService.get('userId')
+    this.checkStatus();
     this.getAllProducts()
   }
 
@@ -60,27 +60,25 @@ export class AllProductComponent implements OnInit {
   }
 
   // function to get all Products
-  getAllProducts(){
-    //this.spinner.show()
-    this.productService.getAllProducts().subscribe((data:any) => {
-      //this.spinner.hide()
-      if (data!=null) {
-        //this.allProducts=data['products']
-        for(let prod of data){
-          for(let image of prod['images']){
-            if(image['isPrimaryImage'])
-            prod.imageSrc="http://localhost:8080/images/"+image['imagePath'].substring(image['imagePath'].lastIndexOf("\\")+1)
-         }
-        }        
+  getAllProducts() {
+    this.spinner.show()
+    this.productService.getAllProducts().subscribe((data: any) => {
+      this.spinner.hide()
+      if (data) {
+        for (let prod of data) {
+          for (let image of prod['images']) {
+            if (image['isPrimaryImage'])
+              prod.imageSrc = "http://localhost:8080/images/" + image['imagePath'].substring(image['imagePath'].lastIndexOf("\\") + 1)
+          }
+        }
         this.allProducts = new MatTableDataSource(data);
-        
+
         this.allProducts.sort = this.sort;
         this.allProducts.paginator = this.paginator;
-        //console.log(this.allProducts)
       }
     },
       err => {
-        //this.spinner.hide()
+        this.spinner.hide()
         this.toastrService.error("Some error occured.")
       });
   }
@@ -101,61 +99,66 @@ export class AllProductComponent implements OnInit {
     this.router.navigate(['view-product', productId])
   }
 
-  addComment(){
-    if(!this.comment || this.comment.trim().length==0)
-    this.toastrService.warning("Enter a comment")
-    else{
-      let data={
-        commentValue:this.comment,
-        commentByUserId:1,
-        commentByUserName:"ojas"
+  addComment() {
+    if (!this.comment || this.comment.trim().length == 0)
+      this.toastrService.warning("Enter a comment")
+    else {
+      let data = {
+        commentValue: this.comment,
+        commentByUserId: this.userId,
+        commentByUserName: this.userName
       }
-      this.productService.addCommentToProduct(data,this.prodId).subscribe((response)=>{
+      this.spinner.show();
+      this.productService.addCommentToProduct(data, this.prodId).subscribe((response) => {
         $('#exampleModal').modal('toggle');
-        if(response!=null){
+        this.spinner.hide()
+        if (response != null) {
           this.updateStatus();
         }
         else
-        this.toastrService.error("Failed to update status.")
+          this.toastrService.error("Failed to update status.")
       },
-    err=>{
-      this.toastrService.error("Some error occured.")
-    })
+        err => {
+          this.spinner.hide()
+          this.toastrService.error("Some error occured.")
+        })
     }
-    
+
   }
 
-  updateStatusOfProduct(selectedStatus,prodId){
-    this.selectedStatus=selectedStatus;
-    this.prodId=prodId;
-    if(selectedStatus=="REJECTED"){ 
+  updateStatusOfProduct(selectedStatus, prodId) {
+    this.selectedStatus = selectedStatus;
+    this.prodId = prodId;
+    if (selectedStatus == "REJECTED") {
       $('#exampleModal').modal('toggle');
     }
-    else{
+    else {
       this.updateStatus()
-    }  
-  }
-
-  updateStatus(){
-    let data={
-      prodStatus:this.selectedStatus,
-      prodId:this.prodId
     }
-    this.productService.updateStatusOfProduct(data).subscribe(response=>{
-      console.log(response)
-        if(response==true){
-          this.toastrService.success("Status updated successfully.")
-        }
-        else{
-          this.toastrService.error("Unable to update status.")
-        }
-    },
-    err=>{
-      this.toastrService.error("Some error occured.")
-    });
   }
 
-  public goBackToPreviousPage(){
+  updateStatus() {
+    this.spinner.show()
+    let data = {
+      prodStatus: this.selectedStatus,
+      prodId: this.prodId
+    }
+    this.productService.updateStatusOfProduct(data).subscribe(response => {
+      this.spinner.hide()
+      if (response == true) {
+        this.toastrService.success("Status updated successfully.")
+      }
+      else {
+        this.toastrService.error("Unable to update status.")
+      }
+    },
+      err => {
+        this.spinner.hide()
+        this.toastrService.error("Some error occured.")
+      });
+  }
+
+  public goBackToPreviousPage() {
     this.location.back();
   }
 
@@ -180,6 +183,6 @@ export class AllProductComponent implements OnInit {
         this.toastrService.error("Some error occured.");
       })
 
-    }
+  }
 
 }

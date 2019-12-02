@@ -1,1 +1,106 @@
-<p>view-seller works!</p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white text-capitalize sticky-top mat-elevation-z8">
+    <a class="navbar-brand">
+        <img src="./../../../assets/YSign.jfif" style="border-radius: 25px;" width="30" height="30"
+            class="d-inline-block align-top" alt="">
+        YourMart
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+            </li>
+        </ul>
+        <span class="form-inline my-2 my-lg-0">
+            <button class="btn btn-outline-info my-2 my-sm-0" (click)="logout()">Logout({{userName}})</button>
+        </span>
+    </div>
+</nav>
+
+<div class="container" *ngIf="currentSeller">
+    <br>
+    <button mat-icon-button matTooltip="Go back" (click)="goBackToPreviousPage()">
+        <mat-icon class="img-responsive">keyboard_backspace</mat-icon>
+    </button>
+    <div class="card mat-elevation-z8 m-4" style='margin: "2%";'>
+        <div class="card-header text-center font-weight-bold text-uppercase bg-secondary text-white">
+            <span class="text-warning">Seller Details</span>
+        </div>
+        <div class="card-body">
+
+            <div class="row mb-2">
+                <div class="col-sm text-info font-weight-bold">
+
+                    <span>Company Name: </span>
+                </div>
+                <div class="col-sm text-info font-weight-bold">
+                    <input type="text" class="form-control" [(ngModel)]="currentSeller.companyName" disabled>
+                </div>
+            </div>
+
+
+            <div class="row mb-2">
+                <div class="col-sm text-info font-weight-bold">
+
+                    <span>Owner Name: </span>
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="form-control" [(ngModel)]="currentSeller.ownerName" disabled>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-sm text-info font-weight-bold">
+
+                    <span>Address: : </span>
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="form-control" [(ngModel)]="currentSeller.address" disabled>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-sm text-info font-weight-bold">
+
+                    <span>Email: </span>
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="form-control" [(ngModel)]="currentSeller.email" disabled>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-sm text-info font-weight-bold">
+
+                    <span>Telephone: </span>
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="form-control" [(ngModel)]="currentSeller.telephone" disabled>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-sm text-info font-weight-bold">
+
+                    <span>Status: : </span>
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="form-control" [(ngModel)]="currentSeller.status" disabled>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-sm text-info font-weight-bold">
+
+                    <span>GST number: </span>
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="form-control" [(ngModel)]="currentSeller.gstnumber" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner></ngx-spinner>

@@ -40,7 +40,7 @@ export class AllSellerComponent implements OnInit {
     this.userName = this.cookieService.get('userName')
     this.sellerId = this.cookieService.get('sellerId')
     this.userId = this.cookieService.get('userId');
-    //this.checkStatus();
+    this.checkStatus();
     this.getallSellers()
   }
 
@@ -58,20 +58,17 @@ export class AllSellerComponent implements OnInit {
 
   // function to get all sellers
   getallSellers(){
-    //this.spinner.show()
+    this.spinner.show()
     this.userManagementService.getAllSellers().subscribe((data:any) => {
-      //this.spinner.hide()
+      this.spinner.hide()
       if (data!=null) {    
-        console.log(data) 
         this.allSellers = new MatTableDataSource(data);
-        
         this.allSellers.sort = this.sort;
         this.allSellers.paginator = this.paginator;
-        //console.log(this.allSellers)
       }
     },
       err => {
-        //this.spinner.hide()
+        this.spinner.hide()
         this.toastrService.error("Some error occured.")
       });
   }
@@ -98,8 +95,9 @@ export class AllSellerComponent implements OnInit {
       status:selectedStatus,
       sellerId:sellerId
     }
+    this.spinner.show();
     this.userManagementService.updateStatusOfseller(data).subscribe(response=>{
-      console.log(response)
+      this.spinner.hide()
         if(response==true){
           this.toastrService.success("Status updated successfully.")
         }

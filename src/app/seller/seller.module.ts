@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { MaterialModule } from '../material/material.module';
   imports: [
     CommonModule,
     HttpClientModule,ToastrModule.forRoot(),FormsModule,MaterialModule,
+    NgxSpinnerModule,
     RouterModule.forChild([
       { path: 'seller-dashboard', component: SellerDashboardComponent },
       { path: 'add-product', component: AddProductComponent },
