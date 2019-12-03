@@ -9,12 +9,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [HomeComponent, LoginComponent, SignupComponent],
   imports: [
     CommonModule,
-    HttpClientModule,
+    HttpClientModule,SharedModule,
     FormsModule,ReactiveFormsModule,NgxSpinnerModule,
     ToastrModule.forRoot(),
     RouterModule.forRoot([

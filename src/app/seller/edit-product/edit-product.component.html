@@ -1,31 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white text-capitalize sticky-top mat-elevation-z8">
-  <a class="navbar-brand">
-    <img src="./../../../assets/YSign.jfif" style="border-radius: 25px;" width="30" height="30"
-      class="d-inline-block align-top" alt="">
-    YourMart
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
-    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item">
-      </li>
-    </ul>
-    <span class="form-inline my-2 my-lg-0">
-      <button class="btn btn-outline-info my-2 my-sm-0" (click)="logout()">Logout({{userName}})</button>
-    </span>
-  </div>
-</nav>
+<app-navbar></app-navbar>
 <div class="container" *ngIf="currentProduct">
   <br>
     <button mat-icon-button matTooltip="Go back" (click)="goBackToPreviousPage()">
         <mat-icon class="img-responsive">keyboard_backspace</mat-icon>
     </button>
   <div class="card mat-elevation-z8 m-4" style='margin: "2%";'>
-    <div class="card-header text-center font-weight-bold bg-secondary text-white">
-      <span class="text-danger">Product Name:</span> {{currentProduct.prodName}}
+    <div class="card-header text-uppercase text-center font-weight-bold bg-secondary text-white">
+      <span class="text-warning ">Product Name:</span> {{currentProduct.prodName}}
     </div>
     <div class="card-body">
       <div class="row">
@@ -40,24 +21,22 @@
             <label class="text-info font-weight-bold">Change primary Image:</label>
             <br>
             <input type="file" (change)="onPrimaryImagePicked($event,currentProduct.prodId)" accept="image/*">
-            <small class="form-text text-muted">*less than 5MB and format-png, jpg, jpeg only.</small>
+            <small class="form-text text-muted">*format should be -png, jpg, jpeg only.</small>
           </div>
         </div>
       </div>
      <hr>
       <div class="row">
-        <div class="col-sm" *ngFor="let image of productImages">
-          <div  *ngIf="!image['isPrimaryImage']">
-            <img class="img-responsive" [src]="image['imagePath']" alt="Smiley face" height="100px">
-          </div>
-        </div>
+        <ng-container class="col-sm" *ngFor="let image of productImages">
+            <img *ngIf="!image['isPrimaryImage']" class="img-responsive mr-2 ml-2 border border-secondary" [src]="image['imagePath']" alt="Smiley face" height="100px">
+        </ng-container>
       </div>
       <div class="row">
         <div class="col-sm">
               <label class="text-info font-weight-bold">Add product images:</label>
               <br>
               <input type="file" (change)="onOtherImagesPicked($event)" multiple accept="image/*">
-              <small class="form-text text-muted">*less than 5MB and format-png, jpg, jpeg only.</small>
+              <small class="form-text text-muted">*format should be -png, jpg, jpeg only.</small>
               <button class="mt-2 mat-elevation-z8 btn btn-sm btn-success"  (click)="addNewImagesOfProduct(currentProduct.prodId)">Add photos</button> 
             </div>
       </div>
@@ -173,3 +152,4 @@
     </div>
   </div>
 </div>
+<ngx-spinner></ngx-spinner>

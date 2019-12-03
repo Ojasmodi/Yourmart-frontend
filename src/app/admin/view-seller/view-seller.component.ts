@@ -26,10 +26,10 @@ export class ViewSellerComponent implements OnInit {
     private spinner: NgxSpinnerService, public userService: UserService, public cookieService: CookieService) { }
 
   ngOnInit() {
+    this.checkStatus();
      this.spinner.show()
      this.userName = this.cookieService.get('userName');
      this.authToken = this.cookieService.get('authToken');
-     this.checkStatus();
      this.productId = this._route.snapshot.paramMap.get('id');
      this.getCurrentSeller()
   }

@@ -3,11 +3,15 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { ProductService } from '../../product.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
-  styleUrls: ['./add-product.component.css']
+  styleUrls: ['./add-product.component.css'],
+  providers: [Location]
 })
 export class AddProductComponent implements OnInit {
 
@@ -40,12 +44,32 @@ export class AddProductComponent implements OnInit {
 
   validUserGuide: boolean = false;
   userGuide: any;
+  userName: string;
+  authToken: string;
+  userId: string;
 
-  constructor(public productService: ProductService, public toastrService: ToastrService,
+  constructor(public productService: ProductService, public location: Location, public toastrService: ToastrService,private spinner:NgxSpinnerService,
     public router: Router, public cookieService: CookieService) { }
 
   ngOnInit() {
+    this.checkStatus();
+    this.userName = this.cookieService.get('userName');
+    this.authToken = this.cookieService.get('authToken');
+    this.userId=this.cookieService.get("userId")
   }
+ 
+  // function to check whether user is logged in or not
+  public checkStatus = () => {
+    if (this.cookieService.get('authToken') === undefined || this.cookieService.get('authToken') === '' ||
+      this.cookieService.get('authToken') === null) {
+      this.toastrService.error("Please login first.");
+      this.router.navigate(['/']);
+      return false;
+    } else {
+      return true
+    }
+  } // end checkStatus
+
 
   onPrimaryImagePicked = (event: Event) => {
     let file = (event.target as HTMLInputElement).files[0];
@@ -75,9 +99,7 @@ export class AddProductComponent implements OnInit {
   }
 
   onOtherImagesPicked = (event: Event) => {
-    //console.log(event)
     for (let file of event.target['files']) {
-      //console.log(file['name']);
       if (file.name.indexOf(".jpeg") < 0 && file.name.indexOf(".png") < 0 && file.name.indexOf(".jpg") < 0) {
         this.toastrService.warning("Please select only jpeg or jpg or png image.")
         this.validOtherImages = false;
@@ -124,7 +146,7 @@ export class AddProductComponent implements OnInit {
       this.toastrService.warning("Select a valid user Guide.")
     }
     else {
-      //this.spinner.show();
+      this.spinner.show();
       const productData = new FormData();
       productData.append("prodCode", this.prodCode);
       productData.append("prodName", this.prodName);
@@ -144,31 +166,26 @@ export class AddProductComponent implements OnInit {
       if (this.prodBrand)
         productData.append("prodBrand", this.prodBrand)
       productData.append("category", this.category)
-      productData.append("sellerId", "1")
+      productData.append("sellerId", this.userId)
       productData.append("mrp", this.MRP)
       productData.append("ssp", this.SSP)
       productData.append("ymp", this.YMP)
-
-
-
       productData.append("primaryImage", this.primaryImage, this.primaryImage['name']);
       for (let file of this.otherImages)
         productData.append(file['name'], file, file['name']);
 
       productData.append(this.userGuide['name'], this.userGuide, this.userGuide['name']);
-      console.log(productData)
       this.productService.addProduct(productData).subscribe((apiResponse) => {
-        //this.spinner.hide();
-        console.log(apiResponse)
+        this.spinner.hide();
         if (apiResponse != null) {
           this.toastrService.show("Product added successfully.");
-          //this.viewAllProducts()
+          this.viewAllProducts()
         }
         else {
           this.toastrService.error("Some error occured while adding new product.")
         }
       }, (err) => {
-        //this.spinner.hide();
+        this.spinner.hide();
         this.toastrService.error("Network problem.")
       })
     }
@@ -176,6 +193,10 @@ export class AddProductComponent implements OnInit {
 
   viewAllProducts() {
     this.router.navigate(['seller-dashboard'])
+  }
+
+  public goBackToPreviousPage() {
+    this.location.back();
   }
 
 }

@@ -1,129 +1,116 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white text-capitalize sticky-top mat-elevation-z8">
-    <a class="navbar-brand">
-        <img src="./../../../assets/YSign.jfif" style="border-radius: 25px;" width="30" height="30"
-            class="d-inline-block align-top" alt="">
-        YourMart
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
-        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item">
-            </li>
-        </ul>
-        <span class="form-inline my-2 my-lg-0">
-            <button class="btn btn-outline-info my-2 my-sm-0" (click)="logout()">Logout({{userName}})</button>
-        </span>
-    </div>
-</nav>
+<app-navbar></app-navbar>
+<div class="container">
 <div class="row p-0 m-2">
-    <div class="col-sm-3"></div>
-    <div class="col-sm p-4 border border-dark">
-        <h2 class="form-signin-heading">Add new product here...</h2>
-        <br>
-        <span>Seller Product Code: </span>
-        <input type="text" id="inputFirstName" class="form-control" [(ngModel)]="prodCode" placeholder="FirstName"
-            autofocus>
-
-        <br>
-        <span>Product Name: </span>
-        <input type="text" id="inputLastName" class="form-control" [(ngModel)]="prodName" placeholder="LastName">
-        <br>
-        <span>Short description: </span>
-        <input type="text" id="inputLastName" class="form-control" [(ngModel)]="shortDes" placeholder="LastName">
-
-        <br>
-        <span>Long Description: </span>
-        <input type="text" id="inputLastName" class="form-control" [(ngModel)]="longDesc" placeholder="LastName">
-
-        <br>
-
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Category</label>
-            </div>
-            <select class="custom-select" [(ngModel)]="category">
-                <option *ngFor="let cat of categories" [value]="cat"> {{cat}}</option>
-            </select>
+        <div class="col-sm-3">
+            <button mat-icon-button matTooltip="Go back" (click)="goBackToPreviousPage()">
+                <mat-icon class="img-responsive">keyboard_backspace</mat-icon>
+            </button>
         </div>
+        <div class="col-sm p-4 border mat-elevation-z8">
+            <h2 class="form-signin-heading">Add new product here...</h2>
+            <br>
+            <span class="text-info font-weight-bold">Seller Product Code:* </span>
+            <input type="text" id="inputFirstName" class="form-control" [(ngModel)]="prodCode" placeholder="Product Code"
+                autofocus>
 
-        Dimensions:-
-        <div class="row">
-            <div class="col">
-                <span>Product length: </span>
-                <input type="number" class="form-control" [(ngModel)]="prodLength" placeholder="Mobile">
+            <br>
+            <span class="text-info font-weight-bold">Product Name:* </span>
+            <input type="text" id="inputLastName" class="form-control" [(ngModel)]="prodName" placeholder="Product Name">
+            <br>
+            <span class="text-info font-weight-bold">Short description:* </span>
+            <input type="text" id="inputLastName" class="form-control" [(ngModel)]="shortDes" placeholder="Short description">
 
-            </div>
-            <div class="col">
-                <span>Product breadth: </span>
-                <input type="number" class="form-control" [(ngModel)]="prodBreadth" placeholder="Mobile">
+            <br>
+            <span class="text-info font-weight-bold">Long Description: </span>
+            <input type="text" id="inputLastName" class="form-control" [(ngModel)]="longDesc" placeholder="Long Description">
 
+            <br>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Category</label>
+                </div>
+                <select class="custom-select" [(ngModel)]="category">
+                    <option *ngFor="let cat of categories" [value]="cat"> {{cat}}</option>
+                </select>
             </div>
-            <div class="col">
-                <span>Product height: </span>
-                <input type="number" class="form-control" [(ngModel)]="prodHeight" placeholder="Mobile">
+            <hr>
+            <span class="text-info font-weight-bold">Dimensions:-</span>
+            <div class="row">
+                <div class="col">
+                    <span class="text-dark font-weight-bold">Product length: </span>
+                    <input type="number" class="form-control" [(ngModel)]="prodLength" placeholder="Product length">
+
+                </div>
+                <div class="col">
+                    <span class="text-dark font-weight-bold">Product breadth: </span>
+                    <input type="number" class="form-control" [(ngModel)]="prodBreadth" placeholder="Product breadth">
+
+                </div>
+                <div class="col">
+                    <span class="text-dark font-weight-bold">Product height: </span>
+                    <input type="number" class="form-control" [(ngModel)]="prodHeight" placeholder="Product height">
+                </div>
             </div>
+            <hr>
+            <span class="text-info font-weight-bold">Product Files:-</span>
+            <br>
+            <span class="text-dark font-weight-bold">Primary Image: </span>
+            <div class="m-2"><input type="file" (change)="onPrimaryImagePicked($event)">
+                <small class="form-text text-muted">*format should be-png, jpg, jpeg only.</small>
+            </div>
+            <span class="text-dark font-weight-bold">Other product Images:</span>
+            <div class="m-2"><input type="file" (change)="onOtherImagesPicked($event)" multiple>
+                <small class="form-text text-muted">*format should be-png, jpg, jpeg only.</small>
+            </div>
+            <span class="text-dark font-weight-bold">Usage instructions (pdf document):</span>
+
+            Usage instructions (pdf document):
+            <div class="m-2"><input type="file" (change)="onuserGuidePicked($event)">
+                <small class="form-text text-muted">*format should be-pdf,txt,doc.</small>
+            </div>
+            <hr>
+            <span class="text-info font-weight-bold"> Product prices:-*</span>
+            <div class="row">
+                <div class="col">
+                    <span class="text-dark font-weight-bold">MRP: </span>
+                    <input type="number" class="form-control" [(ngModel)]="MRP" placeholder="MRP">
+
+                </div>
+                <div class="col">
+                    <span class="text-dark font-weight-bold">SSP: </span>
+                    <input type="number" class="form-control" [(ngModel)]="SSP" placeholder="SSP">
+
+                </div>
+                <div class="col">
+                    <span class="text-dark font-weight-bold">YMP: </span>
+                    <input type="number" class="form-control" [(ngModel)]="YMP" placeholder="YMP">
+                </div>
+            </div>
+            <br>
+
+            <span class="text-info font-weight-bold"> Product attributes:-</span>
+
+            <div class="row">
+                <div class="col">
+                    <span class="text-dark font-weight-bold">Color: </span>
+                    <input type="text" class="form-control" [(ngModel)]="prodColor" placeholder="Color">
+
+                </div>
+                <div class="col">
+                    <span class="text-dark font-weight-bold"> Brand: </span>
+                    <input type="text" class="form-control" [(ngModel)]="prodBrand" placeholder="Brand">
+
+                </div>
+                <div class="col">
+                    <span class="text-dark font-weight-bold">Weight: </span>
+                    <input type="number" class="form-control" [(ngModel)]="prodWeight" placeholder="Weight  ">
+                </div>
+            </div>
+            <br>
+            <button class="btn btn-lg btn-info mat-elevation-z8 btn-block" (click)="addProduct()">Add product</button>
         </div>
-        <br>
-
-        Product Files:-
-        <br>>
-        Primary Image:
-        <div class="m-2"><input type="file" (change)="onPrimaryImagePicked($event)">
-            <small class="form-text text-muted">*less than 5MB and format-png, jpg, jpeg only.</small>
-        </div>
-        Other product Images:
-        <div class="m-2"><input type="file" (change)="onOtherImagesPicked($event)" multiple>
-            <small class="form-text text-muted">*less than 5MB and format-png, jpg, jpeg only.</small>
-        </div>
-        Usage instructions (pdf document):
-        <div class="m-2"><input type="file" (change)="onuserGuidePicked($event)">
-            <small class="form-text text-muted">*less than 5MB and format-pdf,txt,doc.</small>
-        </div>
-
-        Product prices:-
-        <div class="row">
-            <div class="col">
-                <span>MRP: </span>
-                <input type="number" class="form-control" [(ngModel)]="MRP" placeholder="Mobile">
-
-            </div>
-            <div class="col">
-                <span>SSP: </span>
-                <input type="number" class="form-control" [(ngModel)]="SSP" placeholder="Mobile">
-
-            </div>
-            <div class="col">
-                <span>YMP: </span>
-                <input type="number" class="form-control" [(ngModel)]="YMP" placeholder="Mobile">
-            </div>
-        </div>
-        <br>
-
-        Product attributes:-
-        <div class="row">
-            <div class="col">
-                <span>Color: </span>
-                <input type="number" class="form-control" [(ngModel)]="prodColor" placeholder="Mobile">
-
-            </div>
-            <div class="col">
-                <span>Brand: </span>
-                <input type="number" class="form-control" [(ngModel)]="prodBrand" placeholder="Mobile">
-
-            </div>
-            <div class="col">
-                <span>Weight: </span>
-                <input type="number" class="form-control" [(ngModel)]="prodWeight" placeholder="Mobile">
-            </div>
-        </div>
-        <br>
-
-
-
-        <button class="btn btn-lg btn-info btn-block" (click)="addProduct()">Add product</button>
+        <div class="col-sm-3"></div>
     </div>
-    <div class="col-sm-3"></div>
 </div>
+<ngx-spinner></ngx-spinner>

@@ -14,7 +14,7 @@ import { ProductService } from '../../product.service';
 })
 export class SellerDashboardComponent implements OnInit {
 
-  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name', 'Status', 'Category', 'MRP', 'SSP', 'YMP', 'view', 'Edit', 'Delete'];
+  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name', 'Status', 'Category','CreatedOn', 'MRP', 'SSP', 'YMP', 'view', 'Edit'];
   allProducts: MatTableDataSource<any>;
   userName;
   authToken;
@@ -31,10 +31,10 @@ export class SellerDashboardComponent implements OnInit {
     public userManagementService: UserService, public cookieService: CookieService) { }
 
   ngOnInit() {
+    this.checkStatus()
     this.authToken = this.cookieService.get('authToken')
     this.userName = this.cookieService.get('userName')
     this.userId = this.cookieService.get('userId');
-    this.checkStatus();
     this.getProductsBySellerId();
   }
 
@@ -93,48 +93,5 @@ export class SellerDashboardComponent implements OnInit {
   // function for navigating to edit Product component
   public editProduct = (productId) => {
     this.router.navigate(['edit-product', productId])
-  }
-
-  // function to delete Product
-  public deleteProduct = (productId) => {
-    this.spinner.show()
-    this.productService.deleteProduct(productId).subscribe((apiResponse) => {
-      this.spinner.hide()
-      if (apiResponse != null) {
-        this.toastrService.info(`Product Deleted successfully.`)
-        this.getProductsBySellerId();
-      }
-      else {
-        this.toastrService.error("Unable to delete product.")
-      }
-    },
-      err => {
-        this.spinner.hide()
-        this.toastrService.error(err)
-      }
-    );
-  }
-
-  // function to logout user
-  public logout = () => {
-    this.spinner.show();
-    this.userManagementService.logout().subscribe((apiResponse) => {
-      this.spinner.hide();
-      if (apiResponse.status === 200) {
-        this.cookieService.delete('authToken');
-        this.cookieService.delete('userId');
-        this.cookieService.delete('userName');
-        this.toastrService.success("Logged out successfully.")
-        this.router.navigate(['/']);
-      }
-      else {
-        this.toastrService.error(apiResponse.message);
-      }
-    },
-      (err) => {
-        this.spinner.hide();
-        this.toastrService.error("Some error occured.");
-      })
-
   }
 }

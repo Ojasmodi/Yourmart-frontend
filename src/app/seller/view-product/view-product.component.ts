@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
   selector: 'app-view-product',
   templateUrl: './view-product.component.html',
   styleUrls: ['./view-product.component.css'],
-  providers:[Location]
+  providers: [Location]
 })
 export class ViewProductComponent implements OnInit {
 
@@ -20,11 +20,9 @@ export class ViewProductComponent implements OnInit {
   public userInfo: any;
   public userId: any;
   public userName: any;
-  currentProduct={}
+  currentProduct = {}
   productId
-  
 
-  private category;
   categories = ['Footwear', 'Clothing', 'Electronics', 'Beauty']
 
   primaryImage = null
@@ -38,21 +36,23 @@ export class ViewProductComponent implements OnInit {
   userGuide: any;
   productImages: any;
   commentsOfProduct: any;
+  comment: any;
 
 
-  constructor( public toastrService: ToastrService, public _route: ActivatedRoute,public location:Location,
-    public router: Router,public route: ActivatedRoute,public productService:ProductService,
+  constructor(public toastrService: ToastrService, public _route: ActivatedRoute, public location: Location,
+    public router: Router, public route: ActivatedRoute, public productService: ProductService,
     private spinner: NgxSpinnerService, public userService: UserService, public cookieService: CookieService) {
   }
 
   ngOnInit() {
-    //this.spinner.show()
+    this.checkStatus();
+    this.spinner.show()
+    this.userId=this.cookieService.get('userId')
     this.userName = this.cookieService.get('userName');
     this.authToken = this.cookieService.get('authToken');
-    //this.checkStatus();
     this.productId = this._route.snapshot.paramMap.get('id');
     this.getCurrentProduct()
-    
+
   }
 
   // function to check whether user is logged in or not
@@ -67,20 +67,18 @@ export class ViewProductComponent implements OnInit {
     }
   } // end checkStatus
 
- 
+
   getCurrentProduct() {
     this.productService.getSingleproduct(this.productId).subscribe((apiResponse) => {
-      //this.spinner.hide()
-      if (apiResponse!=null) {
-        //console.log(apiResponse);
+      this.spinner.hide()
+      if (apiResponse != null) {
         this.currentProduct = apiResponse;
         this.commentsOfProduct = apiResponse['comments']
-        this.originalPdfPath=this.currentProduct['pdfPath']
-        this.currentProduct['pdfPath']="http://localhost:8080/docs/"+this.currentProduct['pdfPath'].substring(this.currentProduct['pdfPath'].lastIndexOf("\\")+1)
-        console.log(this.currentProduct)
-        this.productImages=this.currentProduct['images'];
-        for(let image of this.productImages){
-          image['imagePath']="http://localhost:8080/images/"+image['imagePath'].substring(image['imagePath'].lastIndexOf("\\")+1)
+        this.originalPdfPath = this.currentProduct['pdfPath']
+        this.currentProduct['pdfPath'] = "http://localhost:8080/docs/" + this.currentProduct['pdfPath'].substring(this.currentProduct['pdfPath'].lastIndexOf("\\") + 1)
+        this.productImages = this.currentProduct['images'];
+        for (let image of this.productImages) {
+          image['imagePath'] = "http://localhost:8080/images/" + image['imagePath'].substring(image['imagePath'].lastIndexOf("\\") + 1)
         }
       }
       else {
@@ -88,43 +86,40 @@ export class ViewProductComponent implements OnInit {
       }
     },
       (err) => {
-       // this.spinner.hide()
+        this.spinner.hide()
         this.toastrService.error(err.message);
       }
     );
   }
 
-
-  // function to logout user
-  public logout = () => {
-    this.spinner.show();
-    this.userService.logout().subscribe((apiResponse) => {
-      this.spinner.hide();
-      if (apiResponse.status === 200) {
-        this.cookieService.delete('authToken');
-        this.cookieService.delete('userId');
-        this.cookieService.delete('userName');
-        this.toastrService.success("Logged out successfully.")
-        this.router.navigate(['/']);
+  addComment(){
+    if(!this.comment || this.comment.trim().length==0)
+    this.toastrService.warning("Enter comment value.")
+    else{
+      let data = {
+        commentValue: this.comment,
+        commentByUserId: this.userId,
+        commentByUserName: this.userName
       }
-      else {
-        this.toastrService.error(apiResponse.message);
-      }
-    },
-      (err) => {
-        this.spinner.hide();
-        this.toastrService.error("Some error occured.");
-      })
+      this.spinner.show();
+      this.productService.addCommentToProduct(data, this.productId).subscribe((response) => {
+        this.spinner.hide()
+        if (response ) {
+          this.toastrService.success("Comment added successfully.")
+          this.getCurrentProduct()
+        }
+        else
+          this.toastrService.error("Failed to update status.")
+      },
+        err => {
+          this.spinner.hide()
+          this.toastrService.error("Some error occured.")
+        })
+    }
   }
 
-  public goBackToPreviousPage(){
+  public goBackToPreviousPage() {
     this.location.back();
   }
-
-
-
-  // viewAllProducts() {
-  //   this.router.navigate(['product-dashboard'])
-  // }
 
 }

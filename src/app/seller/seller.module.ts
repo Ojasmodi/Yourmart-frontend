@@ -11,13 +11,14 @@ import { ToastrModule } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
   declarations: [SellerDashboardComponent, AddProductComponent, EditProductComponent, ViewProductComponent],
   imports: [
     CommonModule,
-    HttpClientModule,ToastrModule.forRoot(),FormsModule,MaterialModule,
+    HttpClientModule,ToastrModule.forRoot(),FormsModule,MaterialModule,SharedModule,
     NgxSpinnerModule,
     RouterModule.forChild([
       { path: 'seller-dashboard', component: SellerDashboardComponent },

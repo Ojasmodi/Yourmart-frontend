@@ -17,9 +17,9 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkStatus();
     this.userName = this.cookieService.get('userName');
-    this.authToken = this.cookieService.get('authToken');
-    this.checkStatus(); 
+    this.authToken = this.cookieService.get('authToken'); 
   }
 
   // function to check whether user is logged in or not

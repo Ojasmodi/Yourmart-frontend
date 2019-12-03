@@ -12,6 +12,7 @@ import { ViewSellerComponent } from './view-seller/view-seller.component';
 import { AllProductComponent } from './all-product/all-product.component';
 import { AllSellerComponent } from './all-seller/all-seller.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -21,7 +22,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
   ],
   imports: [
     CommonModule,HttpClientModule,ToastrModule.forRoot(),FormsModule,MaterialModule,
-    NgxSpinnerModule,
+    NgxSpinnerModule,SharedModule,
     RouterModule.forChild([
       { path: 'admin-dashboard', component: AdminDashboardComponent },
       { path: 'all-products', component: AllProductComponent },

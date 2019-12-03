@@ -1,23 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white text-capitalize sticky-top mat-elevation-z8">
-    <a class="navbar-brand">
-        <img src="./../../../assets/YSign.jfif" style="border-radius: 25px;" width="30" height="30"
-            class="d-inline-block align-top" alt="">
-        YourMart
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
-        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item">
-            </li>
-        </ul>
-        <span class="form-inline my-2 my-lg-0">
-            <button class="btn btn-outline-info my-2 my-sm-0" (click)="logout()">Logout({{userName}})</button>
-        </span>
-    </div>
-</nav>
+<app-navbar></app-navbar>
 <div class="container" *ngIf="currentProduct">
     <br>
     <button mat-icon-button matTooltip="Go back" (click)="goBackToPreviousPage()">
@@ -38,23 +19,34 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col-sm" *ngFor="let image of productImages">
+                <ng-container class="col-sm" *ngFor="let image of productImages">
+
                     <div *ngIf="!image['isPrimaryImage']">
-                        <img class="img-responsive" [src]="image['imagePath']" alt="Smiley face" height="100px">
+                        <img class="img-responsive mr-2 ml-2 border border-secondary" [src]="image['imagePath']"
+                            alt="Smiley face" height="100px">
                     </div>
-                </div>
+                </ng-container>
             </div>
             <hr>
-            <div class="row" >
+            <div class="row">
                 <div class="text-info col-sm font-weight-bold">Comments:</div>
                 <br>
             </div>
-            <div class="row m-1 bg-dark">
-                <div *ngFor="let comment of commentsOfProduct" class="p-1">
+            <div class="row m-1 bg-dark" *ngFor="let comment of commentsOfProduct">
+                <div  class="p-1">
                     <span class="text-danger font-weight-bold text-capitalize">{{comment.commentByUserName}}:</span>
                     <span class="text-white pl-1 text-capitalize"> {{comment.commentValue}}</span><br>
                     <span class="text-muted ">{{comment.dateOfComment|date}}</span>
                 </div>
+            </div>
+            <div *ngIf="authToken=='admin'">
+                <div class="row m-1 bg-dark">
+                    <textarea class="form-control" placeholder="Enter suggestion for the product" [(ngModel)]="comment">
+            </textarea>
+                </div>
+                <button (click)="addComment()" 
+                    class="btn m-2 btn-success btn-sm mat-elevation-z8">Add comment</button>
+                <br>
             </div>
             <span class="text-info font-weight-bold"> Product prices:-</span>
             <div class="row">
@@ -131,66 +123,62 @@
 
                     <span class="text-success font-weight-bold">Long description: </span></div>
                 <div class="col-sm">
-                    <input type="text" class="form-control" disabled [(ngModel)]="currentProduct.shortDes">
+                    <input type="text" class="form-control" disabled [(ngModel)]="currentProduct.longDesc">
                 </div>
 
             </div>
 
             <div class="row m-1">
                 <div class="col-sm">
-
                     <span class="text-success font-weight-bold">Category: </span></div>
                 <div class="col-sm">
                     <input type="text" class="form-control" disabled [(ngModel)]="currentProduct.category">
                 </div>
-
             </div>
-
-
             <div class="row"
                 *ngIf="currentProduct.prodLength || currentProduct.prodHeight || currentProduct.prodHeight">
-                <span class="text-success font-weight-bold">Dimensions:- </span></div>
+                <span class="text-success font-weight-bold">Dimensions:- </span>
+                <br>
+                <div class="col" *ngIf="currentProduct.prodLength">
+                    <span class="text-danger font-weight-bold">Product length: </span>
+                    <input type="number" disabled class="form-control" [(ngModel)]="currentProduct.prodLength"
+                        placeholder="Mobile">
+                </div>
+                <div class="col" *ngIf="currentProduct.prodBreadth">
+                    <span class="text-danger font-weight-bold">Product breadth: </span>
+                    <input type="number" disabled class="form-control" [(ngModel)]="currentProduct.prodBreadth"
+                        placeholder="Mobile">
+
+                </div>
+                <div class="col" *ngIf="currentProduct.prodHeight">
+                    <span class="text-danger font-weight-bold">Product height: </span>
+                    <input type="number" disabled class="form-control" [(ngModel)]="currentProduct.prodHeight"
+                        placeholder="Mobile">
+                </div>
+            </div>
             <br>
-            <div class="col" *ngIf="currentProduct.prodLength">
-                <span class="text-danger font-weight-bold">Product length: </span>
-                <input type="number" disabled class="form-control" [(ngModel)]="currentProduct.prodLength"
-                    placeholder="Mobile">
+            <div class="row" *ngIf="currentProduct.prodColor || currentProduct.prodBrand || currentProduct.prodBrand">
+                <div class="text-success font-weight-bold">Product attributes:- </div>
+                <div class="col" *ngIf="currentProduct.prodColor">
+                    <span class="text-danger font-weight-bold">Color: </span>
+                    <input type="text" disabled class="form-control" [(ngModel)]="currentProduct.prodColor">
 
+                </div>
+                <div class="col" *ngIf="currentProduct.prodBrand">
+                    <span class="text-danger font-weight-bold">Brand: </span>
+                    <input type="text" disabled class="form-control" [(ngModel)]="currentProduct.prodBrand"
+                        placeholder="Mobile">
+
+                </div>
+                <div class="col" *ngIf="currentProduct.prodWeight">
+                    <span class="text-danger font-weight-bold">Weight: </span>
+                    <input type="number" disabled class="form-control" [(ngModel)]="currentProduct.prodWeight"
+                        placeholder="Mobile">
+                </div>
             </div>
-            <div class="col" *ngIf="currentProduct.prodBreadth">
-                <span class="text-danger font-weight-bold">Product breadth: </span>
-                <input type="number" disabled class="form-control" [(ngModel)]="currentProduct.prodBreadth"
-                    placeholder="Mobile">
-
-            </div>
-            <div class="col" *ngIf="currentProduct.prodHeight">
-                <span class="text-danger font-weight-bold">Product height: </span>
-                <input type="number" disabled class="form-control" [(ngModel)]="currentProduct.prodHeight"
-                    placeholder="Mobile">
-            </div>
         </div>
-        <br>
-        <div class="row" *ngIf="currentProduct.prodColor || currentProduct.prodBrand || currentProduct.prodBrand">
-            <span class="text-success font-weight-bold">Product attributes:- </span></div>
-
-
-        <div class="col" *ngIf="currentProduct.prodColor">
-            <span class="text-danger font-weight-bold">Color: </span>
-            <input type="text" disabled class="form-control" [(ngModel)]="currentProduct.prodColor"
-                placeholder="Mobile">
-
-        </div>
-        <div class="col" *ngIf="currentProduct.prodBrand">
-            <span class="text-danger font-weight-bold">Brand: </span>
-            <input type="text" disabled class="form-control" [(ngModel)]="currentProduct.prodBrand"
-                placeholder="Mobile">
-
-        </div>
-        <div class="col" *ngIf="currentProduct.prodWeight">
-            <span class="text-danger font-weight-bold">Weight: </span>
-            <input type="number" disabled class="form-control" [(ngModel)]="currentProduct.prodWeight"
-                placeholder="Mobile">
-        </div>
+        <hr>
     </div>
-    <hr>
 </div>
+
+<ngx-spinner></ngx-spinner>

@@ -40,10 +40,10 @@ export class AllProductComponent implements OnInit {
     public userManagementService: UserService, public cookieService: CookieService) { }
 
   ngOnInit() {
+    this.checkStatus();
     this.authToken = this.cookieService.get('authToken')
     this.userName = this.cookieService.get('userName')
     this.userId = this.cookieService.get('userId')
-    this.checkStatus();
     this.getAllProducts()
   }
 
@@ -160,29 +160,6 @@ export class AllProductComponent implements OnInit {
 
   public goBackToPreviousPage() {
     this.location.back();
-  }
-
-  // function to logout user
-  public logout = () => {
-    this.spinner.show();
-    this.userManagementService.logout().subscribe((apiResponse) => {
-      this.spinner.hide();
-      if (apiResponse.status === 200) {
-        this.cookieService.delete('authToken');
-        this.cookieService.delete('userId');
-        this.cookieService.delete('userName');
-        this.toastrService.success("Logged out successfully.")
-        this.router.navigate(['/']);
-      }
-      else {
-        this.toastrService.error(apiResponse.message);
-      }
-    },
-      (err) => {
-        this.spinner.hide();
-        this.toastrService.error("Some error occured.");
-      })
-
   }
 
 }

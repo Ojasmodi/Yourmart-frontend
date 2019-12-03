@@ -1,23 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white text-capitalize sticky-top mat-elevation-z8">
-    <a class="navbar-brand">
-        <img src="./../../../assets/YSign.jfif" style="border-radius: 25px;" width="30" height="30"
-            class="d-inline-block align-top" alt="">
-        YourMart
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
-        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item">
-            </li>
-        </ul>
-        <span class="form-inline my-2 my-lg-0">
-            <button class="btn btn-outline-info my-2 my-sm-0" (click)="logout()">Logout({{userName}})</button>
-        </span>
-    </div>
-</nav>
+<app-navbar></app-navbar>
 <br>
 
 <div class="container">
@@ -31,7 +12,7 @@
     <h2 class="text-center">My Products</h2>
     <div class="search-div">
         <mat-form-field class="search-form-field" floatLabel="never">
-            <input matInput [(ngModel)]="searchKey" placeholder="Search for an product" autocomplete="off"
+            <input matInput [(ngModel)]="searchKey" placeholder="Search for a product" autocomplete="off"
                 (keyup)="applyFilter()">
             <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
                 <mat-icon>close</mat-icon>
@@ -41,7 +22,7 @@
     <div class="mat-elevation-z8 tableText">
         <mat-table [dataSource]="allProducts" matSort *ngIf="allProducts">
             <ng-container matColumnDef="Primary Image">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Primary Image </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>Primary Image </mat-header-cell>
                 <mat-cell *matCellDef="let element">
                     <img [src]="element.imageSrc" width="60px" height="60px" />
                 </mat-cell>
@@ -74,10 +55,10 @@
                 <mat-header-cell *matHeaderCellDef mat-sort-header> YMP</mat-header-cell>
                 <mat-cell *matCellDef="let element">{{element.ymp}}</mat-cell>
             </ng-container>
-            <!-- <ng-container matColumnDef="CreatedOn">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Created On</mat-header-cell>
+            <ng-container matColumnDef="CreatedOn">
+                <mat-header-cell *matHeaderCellDef >Created On</mat-header-cell>
                 <mat-cell *matCellDef="let element">{{element.createdOn | date}} </mat-cell>
-            </ng-container> -->
+            </ng-container> 
             <ng-container matColumnDef="view">
                 <mat-header-cell *matHeaderCellDef>View</mat-header-cell>
                 <mat-cell *matCellDef="let element">
@@ -92,15 +73,6 @@
                         (click)="editProduct(element.prodId)">
                         <mat-icon class="img-responsive">edit</mat-icon>
                     </button> </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="Delete">
-                <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <button mat-icon-button color="warn" matTooltip="Delete Product"
-                        (click)="deleteProduct(element.prodId)">
-                        <mat-icon class="img-responsive">delete_outline</mat-icon>
-                    </button>
-                </mat-cell>
             </ng-container>
             <ng-container matColumnDef="noData">
                 <mat-footer-cell *matFooterCellDef colspan="6">
