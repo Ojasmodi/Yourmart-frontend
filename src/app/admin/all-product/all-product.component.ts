@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
-import {MatSort} from '@angular/material/sort'
+import { MatSort } from '@angular/material/sort'
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -19,7 +19,7 @@ declare var $: any
 
 export class AllProductComponent implements OnInit {
 
-  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name', 'Category', 'MRP', 'SSP', 'YMP', 'Created On', 'Updated On', 'view', 'Status'];
+  displayedColumns: string[] = ['Primary Image', 'Product Code', 'Name', 'Category', 'MRP', 'SSP', 'YMP', 'Created On', 'Updated On', 'view', 'Status', 'Approve Selected'];
   allProducts: MatTableDataSource<any>;
   productStatusTypes = ["NEW", "APPROVED", "REJECTED", "REVIEW"]
   userName;
@@ -27,12 +27,15 @@ export class AllProductComponent implements OnInit {
   userId;
   searchKey: string;
   sellerId: string;
+  selectedProductsId = []
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   selectedStatus: any;
   prodId: any;
   comment: any;
+
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
 
 
   constructor(public productService: ProductService, public toastrService: ToastrService,
@@ -81,6 +84,39 @@ export class AllProductComponent implements OnInit {
         this.spinner.hide()
         this.toastrService.error("Some error occured.")
       });
+  }
+
+  selectProduct = (prodId) => {
+    if (this.selectedProductsId.includes(prodId)) {
+      for (var i = 0; i < this.selectedProductsId.length; i++) {
+        if (this.selectedProductsId[i] === prodId) {
+          this.selectedProductsId.splice(i, 1);
+        }
+      }
+    }
+    else {
+      this.selectedProductsId.push(prodId)
+    }
+    console.log(this.selectedProductsId)
+  }
+
+  approveSelectedProducts = () => {
+    if (this.selectedProductsId.length == 0)
+      this.toastrService.warning("No products selected.")
+    else {
+      this.spinner.show()
+      this.productService.approveSelectedProducts(this.selectedProductsId).subscribe((response) => {
+        this.spinner.hide()
+        if (response) {
+          this.toastrService.success("Selected products has been approved succesfully.")
+          this.getAllProducts();
+        }
+        else {
+          this, this.toastrService.error("Failed to update status of the products.")
+        }
+      })
+    }
+
   }
 
   // function to clear filter rows result

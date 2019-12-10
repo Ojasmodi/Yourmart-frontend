@@ -48,6 +48,7 @@ export class EditProductComponent implements OnInit {
     this.spinner.show()
     this.userName = this.cookieService.get('userName');
     this.authToken = this.cookieService.get('authToken');
+    this.userId= this.cookieService.get('userId');
     this.productId = this._route.snapshot.paramMap.get('id');
     this.getCurrentProduct()
 
@@ -211,24 +212,29 @@ export class EditProductComponent implements OnInit {
 
   addNewImagesOfProduct(prodId) {
 
-    let productData = new FormData()
-    for (let file of this.otherImages)
-      productData.append(file['name'], file, file['name']);
-    this.spinner.show()
-    this.productService.addNewImagesOfProduct(productData, 1, prodId).subscribe((response) => {
-      this.spinner.hide()
-      if (response) {
-        this.toastrService.success("Images added successfully.")
-        this.getCurrentProduct();
-      }
-      else {
-        this.toastrService.error("Failed to add image|es.")
-      }
-    },
-      err => {
+    if (!this.validOtherImages) {
+      this.toastrService.warning("Please select only valid images");
+    }
+    else {
+      let productData = new FormData()
+      for (let file of this.otherImages)
+        productData.append(file['name'], file, file['name']);
+      this.spinner.show()
+      this.productService.addNewImagesOfProduct(productData, 1, prodId).subscribe((response) => {
         this.spinner.hide()
-        this.toastrService.error("Some error occured.")
-      });
+        if (response) {
+          this.toastrService.success("Images added successfully.")
+          this.getCurrentProduct();
+        }
+        else {
+          this.toastrService.error("Failed to add image|es.")
+        }
+      },
+        err => {
+          this.spinner.hide()
+          this.toastrService.error("Some error occured.")
+        });
+    }
   }
 
   public goBackToPreviousPage() {

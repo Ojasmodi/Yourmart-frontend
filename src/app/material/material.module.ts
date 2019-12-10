@@ -3,6 +3,7 @@ import * as Material from '@angular/material';
 
 @NgModule({
   exports: [
+    Material.MatCheckboxModule,
     Material.MatToolbarModule,
     Material.MatGridListModule,
     Material.MatFormFieldModule,
@@ -11,7 +12,6 @@ import * as Material from '@angular/material';
     Material.MatButtonModule,
     Material.MatTableModule,
     Material.MatIconModule,
-    Material.MatSortModule,
     Material.MatCardModule,
     Material.MatSidenavModule,
     Material.MatListModule,
@@ -22,7 +22,7 @@ import * as Material from '@angular/material';
     Material.MatExpansionModule,
     Material.MatDividerModule,
   ],
-  imports: [Material.MatToolbarModule,
+  imports: [Material.MatToolbarModule,Material.MatCheckboxModule,
   Material.MatGridListModule,
   Material.MatFormFieldModule,
   Material.MatInputModule,
@@ -30,7 +30,6 @@ import * as Material from '@angular/material';
   Material.MatButtonModule,
   Material.MatTableModule,
   Material.MatIconModule,
-  Material.MatSortModule,
   Material.MatTableModule,
   Material.MatCardModule,
   Material.MatSidenavModule,

@@ -53,7 +53,6 @@
                 <br>
                 <input type="file" (change)="onuserGuidePicked($event,currentProduct.prodId)">
                   <small class="form-text text-muted">*format should be pdf,txt,doc.</small> 
-              <!-- <button class="mt-2 mat-elevation-z8 btn btn-sm btn-success"  (click)="updateProductUserGuide(currentProduct.prodId)">Update user guide</button>  -->
             </div>
       </div>
       <hr>
@@ -67,19 +66,20 @@
               <div class="col-sm">
                 
                   <span>Seller Product Code: </span>
-                  <input type="text" class="form-control" [(ngModel)]="currentProduct.prodCode" placeholder="FirstName">
+                  <input type="text" class="form-control" [(ngModel)]="currentProduct.prodCode" placeholder="Seller Product Code">
           
                   <br>
                   <span>Product Name: </span>
-                  <input type="text" class="form-control" [(ngModel)]="currentProduct.prodName" placeholder="LastName">
+                  <input type="text" class="form-control" [(ngModel)]="currentProduct.prodName" placeholder="Product Name">
                   <br>
                   <span>Short description: </span>
-                  <input type="text" id="inputLastName" class="form-control" [(ngModel)]="currentProduct.shortDes" placeholder="LastName">
+                  <input type="text" id="inputLastName" class="form-control" [(ngModel)]="currentProduct.shortDes" placeholder="Short description">
           
                   <br>
+                  <ng-container *ngIf="currentProduct.longDesc">
                   <span>Long Description: </span>
-                  <input type="text" id="inputLastName" class="form-control" [(ngModel)]="currentProduct.longDesc" placeholder="LastName">
-          
+                  <input type="text" id="inputLastName" class="form-control" [(ngModel)]="currentProduct.longDesc" placeholder="Long Description">
+                  </ng-container>
                   <br>
           
                   <div class="input-group mb-3">

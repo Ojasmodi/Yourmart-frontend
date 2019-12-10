@@ -61,6 +61,10 @@
                 <mat-header-cell *matHeaderCellDef mat-sort-header> YMP</mat-header-cell>
                 <mat-cell *matCellDef="let element">{{element.ymp}}</mat-cell>
             </ng-container>
+            <ng-container matColumnDef='Approve Selected'>
+                <mat-header-cell *matHeaderCellDef (click)="approveSelectedProducts()">Click to approve selected</mat-header-cell>
+                <mat-cell *matCellDef="let element"><mat-checkbox class="pl-5" (click)="selectProduct(element.prodId)"></mat-checkbox></mat-cell>
+            </ng-container>
             <ng-container matColumnDef="Created On">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Created On</mat-header-cell>
                 <mat-cell *matCellDef="let element">{{element.createdOn|date}} </mat-cell>

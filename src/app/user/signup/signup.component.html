@@ -27,7 +27,8 @@
             <span>Company-Name: </span>
             <input type="text" id="inputFirstName" class="form-control" formControlName="companyName"
                 placeholder="Company-Name" autofocus>
-            <div *ngIf="f.companyName.errors && (f.companyName.dirty || f.companyName.touched)" class="alert alert-danger mt-1">
+            <div *ngIf="f.companyName.errors && (f.companyName.dirty || f.companyName.touched)"
+                class="alert alert-danger mt-1">
                 <div *ngIf="f.companyName.errors.required">Company-Name is required...</div>
                 <div *ngIf="f.companyName.errors.pattern">Company-Name should contain only alphabets...</div>
                 <div *ngIf="f.companyName.errors.minlength">Company-Name must be atleast 3 characters long...</div>
@@ -37,7 +38,8 @@
             <label for="inputLastName" class="sr-only">OwnerName</label>
             <input type="text" id="inputLastName" class="form-control" formControlName="ownerName"
                 placeholder="Owner-Name">
-            <div *ngIf="f.ownerName.errors && (f.ownerName.dirty || f.ownerName.touched)" class="alert alert-danger mt-1">
+            <div *ngIf="f.ownerName.errors && (f.ownerName.dirty || f.ownerName.touched)"
+                class="alert alert-danger mt-1">
                 <div *ngIf="f.ownerName.errors.required">Owner-Name is required...</div>
                 <div *ngIf="f.ownerName.errors.pattern">Owner-Name should contain only alphabets...</div>
                 <div *ngIf="f.ownerName.errors.minlength">Owner-Name must be atleast 3 characters long...</div>
@@ -55,20 +57,24 @@
             <label for="inputLastName" class="sr-only">GST number</label>
             <input type="text" id="inputLastName" class="form-control" formControlName="GSTnumber"
                 placeholder="GST number">
-            <div *ngIf="f.GSTnumber.errors && (f.GSTnumber.dirty || f.GSTnumber.touched)" class="alert alert-danger mt-1">
+            <div *ngIf="f.GSTnumber.errors && (f.GSTnumber.dirty || f.GSTnumber.touched)"
+                class="alert alert-danger mt-1">
                 <div *ngIf="f.GSTnumber.errors.required">GST number is required...</div>
                 <div *ngIf="f.GSTnumber.errors.pattern">GST number shouldn't contain any special chars...</div>
-                <div *ngIf="f.GSTnumber.errors.minlength || f.GSTnumber.errors.maxlength">GST number must be 15 characters long...</div>
+                <div *ngIf="f.GSTnumber.errors.minlength || f.GSTnumber.errors.maxlength">GST number must be 15
+                    characters long...</div>
             </div>
             <br>
             <span>Telephone: </span>
             <label for="inputMobile" class="sr-only">Contact No.</label>
-                <input type="text" class="form-control" formControlName="telephone" placeholder="Telephone"
-                    id="inputMobile">
-            <div *ngIf="f.telephone.errors && (f.telephone.dirty || f.telephone.touched)" class="alert alert-danger mt-1">
+            <input type="text" class="form-control" formControlName="telephone" placeholder="Telephone"
+                id="inputMobile">
+            <div *ngIf="f.telephone.errors && (f.telephone.dirty || f.telephone.touched)"
+                class="alert alert-danger mt-1">
                 <div *ngIf="f.telephone.errors.required">Telephone number is required...</div>
                 <div *ngIf="f.telephone.errors.pattern">Telephone number should contain only numbers...</div>
-                <div *ngIf="f.telephone.errors.minlength || f.telephone.errors.maxlength">Telephone number must be 10 characters long...</div>
+                <div *ngIf="f.telephone.errors.minlength || f.telephone.errors.maxlength">Telephone number must be 10
+                    characters long...</div>
             </div>
             <br>
             <span>Email: </span>
@@ -86,20 +92,21 @@
                 placeholder="Password">
             <div *ngIf="f.password.errors && (f.password.dirty || f.password.touched)" class="alert alert-danger mt-1">
                 <div *ngIf="f.password.errors.required">Password is required...</div>
-                <div *ngIf="f.password.errors.pattern"> Password should contain minimum eight characters, at least one number and one special character:</div>
+                <div *ngIf="f.password.errors.pattern"> Password should contain minimum eight characters, at least one
+                    number and one special character:</div>
             </div>
             <br>
             <span>Confirm-password: </span>
             <label for="inputPassword" class="sr-only">Confirm-password</label>
             <input type="password" id="inputPassword" class="form-control" formControlName="confirmPassword"
                 placeholder="Confirm-password">
-            <div *ngIf="(f.confirmPassword.dirty || f.confirmPassword.touched)"
-                class="alert alert-danger mt-1">
+            <div *ngIf="(f.confirmPassword.dirty || f.confirmPassword.touched)" class="alert alert-danger mt-1">
                 <div *ngIf="f.confirmPassword.value!=f.password.value"> Confirm-password and password doesn't match.
                 </div>
             </div>
             <br>
-            <button [disabled]="!sellerForm.valid"  class="btn btn-lg mat-elevation-z8 btn-info btn-block" type="submit" >Sign Up</button>
+            <button [disabled]="!sellerForm.valid" class="btn btn-lg mat-elevation-z8 btn-info btn-block"
+                type="submit">Sign Up</button>
         </div>
         <div class="col-sm-3"></div>
     </div>

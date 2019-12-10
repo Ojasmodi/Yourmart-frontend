@@ -74,8 +74,8 @@ export class AddProductComponent implements OnInit {
   onPrimaryImagePicked = (event: Event) => {
     let file = (event.target as HTMLInputElement).files[0];
 
-    if (file.name.indexOf(".jpeg") < 0 && file.name.indexOf(".png") < 0 && file.name.indexOf(".jpg") < 0) {
-      this.toastrService.warning("Please select only jpeg or jpg or png image.")
+    if (file.name.indexOf(".jpeg") < 0 &&  file.name.indexOf(".jfif")<0 && file.name.indexOf(".png") < 0 && file.name.indexOf(".jpg") < 0) {
+      this.toastrService.warning("Please select only jpeg or jfif or jpg or png image.")
       this.validPrimaryImage = false;
     }
     else {
@@ -88,7 +88,7 @@ export class AddProductComponent implements OnInit {
 
     let file = (event.target as HTMLInputElement).files[0];
 
-    if (file.name.indexOf(".pdf") < 0 && file.name.indexOf(".txt") < 0 && file.name.indexOf(".doc") < 0) {
+    if (file.name.indexOf(".pdf") < 0  && file.name.indexOf(".txt") < 0 && file.name.indexOf(".doc") < 0) {
       this.toastrService.warning("Please select only pdf or txt or doc image.")
       this.validUserGuide = false;
     }
@@ -100,8 +100,8 @@ export class AddProductComponent implements OnInit {
 
   onOtherImagesPicked = (event: Event) => {
     for (let file of event.target['files']) {
-      if (file.name.indexOf(".jpeg") < 0 && file.name.indexOf(".png") < 0 && file.name.indexOf(".jpg") < 0) {
-        this.toastrService.warning("Please select only jpeg or jpg or png image.")
+      if (file.name.indexOf(".jpeg") < 0 && file.name.indexOf(".jfif")<0 && file.name.indexOf(".png") < 0 && file.name.indexOf(".jpg") < 0) {
+        this.toastrService.warning("Please select only jpeg or jpg or png or jfif image.")
         this.validOtherImages = false;
         this.otherImages = []
         break;
@@ -177,9 +177,9 @@ export class AddProductComponent implements OnInit {
       productData.append(this.userGuide['name'], this.userGuide, this.userGuide['name']);
       this.productService.addProduct(productData).subscribe((apiResponse) => {
         this.spinner.hide();
-        if (apiResponse != null) {
+        if (apiResponse) {
           this.toastrService.show("Product added successfully.");
-          this.viewAllProducts()
+          this.viewProduct(apiResponse['prodId'])
         }
         else {
           this.toastrService.error("Some error occured while adding new product.")
@@ -191,8 +191,8 @@ export class AddProductComponent implements OnInit {
     }
   }
 
-  viewAllProducts() {
-    this.router.navigate(['seller-dashboard'])
+  viewProduct(id) {
+    this.router.navigate(['view-product',id])
   }
 
   public goBackToPreviousPage() {

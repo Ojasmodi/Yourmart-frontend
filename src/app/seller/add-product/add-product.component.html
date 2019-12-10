@@ -57,15 +57,13 @@
             <br>
             <span class="text-dark font-weight-bold">Primary Image: </span>
             <div class="m-2"><input type="file" (change)="onPrimaryImagePicked($event)">
-                <small class="form-text text-muted">*format should be-png, jpg, jpeg only.</small>
+                <small class="form-text text-muted">*format should be-png, jpg,jfif, jpeg only.</small>
             </div>
             <span class="text-dark font-weight-bold">Other product Images:</span>
             <div class="m-2"><input type="file" (change)="onOtherImagesPicked($event)" multiple>
-                <small class="form-text text-muted">*format should be-png, jpg, jpeg only.</small>
+                <small class="form-text text-muted">*format should be-png, jpg,jfif, jpeg only.</small>
             </div>
-            <span class="text-dark font-weight-bold">Usage instructions (pdf document):</span>
-
-            Usage instructions (pdf document):
+            <span class="text-dark font-weight-bold">Usage instructions Guide:</span>
             <div class="m-2"><input type="file" (change)="onuserGuidePicked($event)">
                 <small class="form-text text-muted">*format should be-pdf,txt,doc.</small>
             </div>

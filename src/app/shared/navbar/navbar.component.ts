@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+  appName:string="YourMart"
   userName: string;
 
   constructor(public cookieService:CookieService,private toastrService:ToastrService,
@@ -21,6 +22,7 @@ export class NavbarComponent implements OnInit {
   logout(){
     this.cookieService.delete('authToken');
     this.cookieService.delete('userName');
+    this.cookieService.delete('userId')
     this.toastrService.success("Logged out successfully.")
     this.router.navigate(['/']);
   }

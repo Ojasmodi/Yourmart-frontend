@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { SellerModule } from './seller/seller.module';
 import { AdminModule } from './admin/admin.module';
 import { HomeComponent } from './user/home/home.component';
+import { MaterialModule } from './material/material.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,7 @@ import { HomeComponent } from './user/home/home.component';
   ],
   imports:[
   BrowserModule,
-    HttpClientModule,UserModule, SellerModule,
+    HttpClientModule,UserModule, SellerModule,MaterialModule,
     AdminModule,
     RouterModule.forRoot([
       { path: 'home', component: HomeComponent, pathMatch: 'full' },

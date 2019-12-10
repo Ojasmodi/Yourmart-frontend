@@ -5,16 +5,16 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ProductService {
-  addCommentToProduct(data: { commentValue: any; commentByUserId: any; commentByUserName: any; },prodId) {
-    return this.http.post(`${this.baseUrl}/comment/add/${prodId}`, data);
-  }
-  
-  
 
   private baseUrl = 'http://localhost:8080/api/v1';
 
-  constructor(public http: HttpClient, private cookieService: CookieService) { }
+  constructor(public http: HttpClient) { }
+
+  approveSelectedProducts(selectedProductsId: any[]) {
+    return this.http.put(`${this.baseUrl}/product/update/status/productIds?productIds=${selectedProductsId}`, '')
+  }
 
   addProduct(productData: FormData):any {
     return this.http.post(`${this.baseUrl}/product/add`, productData);
@@ -35,13 +35,6 @@ export class ProductService {
     return this.http.put(`${this.baseUrl}/product/update/otherdetails/${id}`, data);
   }
   
-  updateproduct(productId: any, productData: any) {
-    throw new Error("Method not implemented.");
-  }
-
-  deleteProduct(productId: any) {
-    return null
-  }
   getProductsBySellerId(sellerId: any) {
     return this.http.get(`${this.baseUrl}/seller/get/${sellerId}`);
   }
@@ -56,5 +49,11 @@ export class ProductService {
   getAllProducts() {
     return this.http.get(`${this.baseUrl}/product/all`);
   }
+
+  addCommentToProduct(data: { commentValue: any; commentByUserId: any; commentByUserName: any; },prodId) {
+    return this.http.post(`${this.baseUrl}/comment/add/${prodId}`, data);
+  }
+  
+  
 
 }
